@@ -46,7 +46,7 @@ A modern, professional portfolio website for an Entry-Level Data & Software Deve
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/Hemang0710/Portfolio.git
    cd Portfolio
    ```
 
@@ -106,7 +106,7 @@ A modern, professional portfolio website for an Entry-Level Data & Software Deve
 
 1. **Contact Information**
    - Edit `components/Footer.tsx` for social links
-   - Update email in `app/contact/page.tsx`
+   - Update email in `app/contact/ContactContent.tsx`
    - Modify location in various pages
 
 2. **Projects**
@@ -115,7 +115,7 @@ A modern, professional portfolio website for an Entry-Level Data & Software Deve
    - Modify metrics and descriptions
 
 3. **Resume**
-   - Edit `app/resume/page.tsx` with your actual resume content
+   - Edit `app/resume/ResumeContent.tsx` with your actual resume content
    - Create a PDF version and link it in the download button
 
 4. **About Me**
@@ -193,4 +193,3 @@ For questions or feedback, please reach out through the contact form on the webs
 ---
 
 **Built with ❤️ for the Canadian tech community**
-
