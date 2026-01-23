@@ -1,71 +1,82 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { GraduationCap, Briefcase, MapPin, Calendar } from 'lucide-react'
+import { GraduationCap, Briefcase, MapPin, Calendar, Heart, Coffee, Code2 } from 'lucide-react'
+import SkillsVisualization from '@/components/SkillsVisualization'
+import GitHubStats from '@/components/GitHubStats'
 
 const timeline = [
   {
     type: 'education',
-    title: 'Humber College',
-    subtitle: 'Data Analytics & Business Intelligence',
+    title: 'The Humber College Institute of Technology & Advanced Learning',
+    subtitle: 'Ontario Graduate Certificate – Information Technology Solutions',
     location: 'Toronto, Ontario',
-    period: '2022 - 2024',
-    description: 'Focused on data engineering, machine learning, and business intelligence. Completed projects in predictive modeling, ETL pipelines, and data visualization.',
+    period: 'Jan 2024 - August 2025',
+    description: 'Relevant Courses: Web Programming & Frameworks, Database Systems, Machine Learning, Big Data, Cloud Computing. Gained hands-on experience in full-stack development and modern web technologies.',
     icon: GraduationCap,
   },
   {
     type: 'experience',
-    title: 'Software Developer Intern',
-    subtitle: 'Tech Company',
+    title: 'Full Stack Developer (Co-op)',
+    subtitle: 'PopIn',
     location: 'Ontario, Canada',
-    period: '2024',
-    description: 'Developed backend APIs and data processing pipelines. Worked on real-time analytics dashboards and contributed to ML model deployment infrastructure.',
+    period: 'April 2025 – Sep 2025',
+    description: 'Built Python-based web scraping pipelines to collect and process event-related data. Developed front-end using Expo (React Native) for responsive user experience. Collaborated with cross-functional teams to integrate APIs and streamline event management features.',
     icon: Briefcase,
   },
   {
     type: 'experience',
-    title: 'Data Analyst',
-    subtitle: 'Industry Experience',
-    location: 'India',
-    period: '2021 - 2022',
-    description: 'Analyzed large datasets to extract business insights. Built automated reporting systems and collaborated with cross-functional teams to drive data-driven decisions.',
+    title: 'Web Developer',
+    subtitle: 'Techmicra IT Solutions',
+    location: 'Ahmedabad, India',
+    period: 'Jan 2021 – Sep 2023',
+    description: 'Built responsive web apps using React, JavaScript, and Bootstrap. Integrated Firebase and REST APIs for secure data transactions. Implemented AI-driven features such as recommendation engines.',
     icon: Briefcase,
   },
   {
+    type: 'education',
+    title: 'Gujarat Technological University',
+    subtitle: 'Bachelor\'s in Engineering – Computer Engineering',
+    location: 'Gujarat, India',
+    period: 'Aug 2018 – July 2021',
+    description: 'Relevant Courses: Advanced Java, Python, MySQL, Data Structure and Design Patterns, Data Algorithms. Built strong foundation in programming and software engineering principles.',
+    icon: GraduationCap,
+  },
+  {
     type: 'volunteer',
-    title: 'Data Science Volunteer',
-    subtitle: 'Non-Profit Organization',
+    title: 'Web Developer Volunteer',
+    subtitle: 'Rise UP (Yogi Divine Society Canada)',
     location: 'Ontario, Canada',
-    period: '2023 - Present',
-    description: 'Volunteered to build forecasting models for food drive demand prediction. Created data pipelines and visualization dashboards to support operational efficiency.',
-    icon: Briefcase,
+    period: 'Apr 2024 - Present',
+    description: 'Developed web applications to support community initiatives. Enhanced UI/UX and backend systems using JavaScript and PHP.',
+    icon: Heart,
   },
 ]
 
 const techCategories = [
   {
-    category: 'Data Engineering',
-    technologies: ['Python', 'SQL', 'Apache Airflow', 'PostgreSQL', 'MongoDB', 'AWS S3', 'ETL Pipelines'],
+    category: 'Frontend',
+    technologies: ['HTML5', 'CSS3', 'React', 'React Native', 'Bootstrap', 'JavaScript'],
   },
   {
-    category: 'Machine Learning',
-    technologies: ['Scikit-learn', 'TensorFlow', 'Pandas', 'NumPy', 'XGBoost', 'Feature Engineering', 'Model Deployment'],
+    category: 'Backend',
+    technologies: ['Node.js', 'Express.js', 'Spring Boot', 'RESTful APIs', 'Flask', 'FastAPI'],
   },
   {
-    category: 'Backend Development',
-    technologies: ['Node.js', 'Express.js', 'REST APIs', 'GraphQL', 'Docker', 'Microservices', 'API Design'],
-  },
-  {
-    category: 'Data Visualization',
-    technologies: ['Tableau', 'Power BI', 'D3.js', 'Recharts', 'Chart.js', 'Dashboard Design'],
-  },
-  {
-    category: 'Cloud & DevOps',
-    technologies: ['AWS', 'Azure', 'Git', 'CI/CD', 'Kubernetes', 'Terraform'],
+    category: 'Databases',
+    technologies: ['MongoDB', 'MySQL', 'PostgreSQL', 'Firebase'],
   },
   {
     category: 'Programming Languages',
-    technologies: ['Python', 'JavaScript', 'TypeScript', 'SQL', 'R', 'Java'],
+    technologies: ['JavaScript', 'Java', 'Python', 'PHP', '.NET'],
+  },
+  {
+    category: 'Tools & Cloud',
+    technologies: ['Git/GitHub', 'AWS (basic)', 'Agile/Scrum'],
+  },
+  {
+    category: 'Concepts',
+    technologies: ['OOP', 'Data Structures', 'REST APIs', 'Web Scraping'],
   },
 ]
 
@@ -86,12 +97,18 @@ export default function AboutContent() {
               <span className="gradient-text">About Me</span>
             </h1>
             <p className="text-body mb-8 max-w-2xl mx-auto">
-              Data & Software Developer passionate about transforming complex data into actionable insights 
-              through modern engineering practices and machine learning
+              Hey! I&apos;m <span className="font-semibold text-gray-900 dark:text-gray-100">Hemang</span>, an entry-level Full-Stack Developer 
+              passionate about building scalable, user-friendly web applications using React, Node.js, and modern web technologies.
             </p>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
-              <MapPin className="w-4 h-4 text-gray-500" />
-              <span className="text-sm text-gray-700 dark:text-gray-300 font-medium">Ontario, Canada</span>
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
+                <MapPin className="w-4 h-4 text-gray-500" />
+                <span className="text-sm text-gray-700 dark:text-gray-300 font-medium">Ontario, Canada</span>
+              </div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
+                <Code2 className="w-4 h-4 text-gray-500" />
+                <span className="text-sm text-gray-700 dark:text-gray-300 font-medium">Open to Opportunities</span>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -107,26 +124,53 @@ export default function AboutContent() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="heading-2 mb-8">Professional Summary</h2>
+              <h2 className="heading-2 mb-8">My Story</h2>
               <div className="space-y-6">
                 <p className="text-body">
-                  I&apos;m a Data & Software Developer with a strong foundation in data engineering, 
-                  machine learning, and backend development. My journey began with a passion for solving 
-                  complex problems using data-driven approaches, and I&apos;ve built expertise through 
-                  hands-on experience in both industry and academic settings.
+                  I&apos;m an entry-level Full-Stack Developer with hands-on experience building web applications 
+                  using React, Node.js, Express, REST APIs, and SQL/NoSQL databases. My journey began with a 
+                  Bachelor&apos;s in Computer Engineering from Gujarat Technological University, where I developed 
+                  a strong foundation in programming languages like Java, Python, and web technologies.
                 </p>
                 <p className="text-body">
-                  Currently based in <span className="font-semibold text-gray-900 dark:text-white">Ontario, Canada</span>, 
-                  I&apos;ve completed my education at Humber College, specializing in Data Analytics & Business Intelligence. 
-                  My experience spans from industry work in India to internships and volunteer opportunities in Canada, 
-                  giving me a diverse perspective on building scalable data solutions that work in real-world contexts.
+                  Currently based in <span className="font-semibold text-gray-900 dark:text-white">Etobicoke, Ontario, Canada</span>, 
+                  I completed my Ontario Graduate Certificate in Information Technology Solutions at Humber College. 
+                  My experience spans from professional work at Techmicra IT Solutions in India, where I built responsive 
+                  web apps and integrated APIs, to my recent co-op position at PopIn, where I developed full-stack solutions 
+                  using React Native and Python.
                 </p>
                 <p className="text-body">
-                  I&apos;m particularly interested in building end-to-end data pipelines, developing machine 
-                  learning models for production environments, and creating robust backend systems that 
-                  power data-driven products. I&apos;m always eager to learn new technologies and contribute 
-                  to meaningful projects that make a tangible impact.
+                  When I&apos;m not coding, you&apos;ll find me exploring new web technologies, contributing to open-source 
+                  projects, or working on side projects that showcase my full-stack capabilities. I believe in writing clean, 
+                  maintainable code and building applications that are both powerful and user-friendly.
                 </p>
+                <p className="text-body">
+                  I&apos;m particularly passionate about building scalable web applications, creating seamless user experiences 
+                  with React, and developing robust backend systems with Node.js and Express. I&apos;m always eager to learn 
+                  new technologies and contribute to meaningful projects that solve real-world problems.
+                </p>
+              </div>
+              
+              {/* Personal Interests */}
+              <div className="mt-8 p-6 bg-gradient-to-br from-accent/5 to-accent/10 rounded-xl border border-accent/20">
+                <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                  <Heart className="w-5 h-5 text-accent" />
+                  Beyond Code
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="flex items-center gap-3">
+                    <Coffee className="w-5 h-5 text-gray-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Coffee enthusiast & problem solver</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Code2 className="w-5 h-5 text-gray-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Open source contributor</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Heart className="w-5 h-5 text-gray-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Volunteer data scientist</span>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -199,8 +243,42 @@ export default function AboutContent() {
         </div>
       </section>
 
-      {/* Tech Stack */}
+      {/* Skills Visualization */}
       <section className="section-padding-sm bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="max-w-6xl mx-auto mb-12"
+          >
+            <h2 className="heading-2 mb-4 text-center">Skills & Expertise</h2>
+            <p className="text-body-sm text-center max-w-2xl mx-auto mb-12">
+              A visual breakdown of my core competencies and proficiency levels
+            </p>
+            <SkillsVisualization />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* GitHub Stats */}
+      <section className="section-padding-sm bg-white dark:bg-gray-900">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="max-w-4xl mx-auto"
+          >
+            <GitHubStats />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Tech Stack */}
+      <section className="section-padding-sm bg-white dark:bg-gray-900">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -209,7 +287,7 @@ export default function AboutContent() {
             transition={{ duration: 0.6 }}
             className="max-w-6xl mx-auto"
           >
-            <h2 className="heading-2 mb-12 text-center">Technical Skills</h2>
+            <h2 className="heading-2 mb-12 text-center">Technologies I Work With</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {techCategories.map((category, index) => (
                 <motion.div

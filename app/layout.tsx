@@ -8,20 +8,20 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-  title: 'Data & Software Developer | Portfolio',
-  description: 'Entry-Level Data & Software Developer building scalable, data-driven systems. Specialized in data engineering, machine learning, and backend development.',
-  keywords: ['Data Engineer', 'Software Developer', 'Machine Learning', 'Data Science', 'Canada', 'Portfolio'],
-  authors: [{ name: 'Data & Software Developer' }],
+  title: 'Hemang Patel | Full-Stack Developer | Canada',
+  description: 'Full-Stack Developer based in Etobicoke, Ontario, Canada. Building scalable, user-friendly web applications with React, Node.js, Express, and modern databases. Open to opportunities.',
+  keywords: ['Hemang Patel', 'Full-Stack Developer', 'Web Developer', 'React', 'Node.js', 'MERN Stack', 'Canada', 'Ontario', 'Portfolio', 'JavaScript', 'TypeScript', 'Next.js'],
+  authors: [{ name: 'Hemang Patel' }],
   openGraph: {
-    title: 'Data & Software Developer | Portfolio',
-    description: 'Entry-Level Data & Software Developer building scalable, data-driven systems',
+    title: 'Hemang Patel | Full-Stack Developer',
+    description: 'Full-Stack Developer based in Etobicoke, Ontario, Canada. Building scalable, user-friendly web applications.',
     type: 'website',
     locale: 'en_CA',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Data & Software Developer | Portfolio',
-    description: 'Entry-Level Data & Software Developer building scalable, data-driven systems',
+    title: 'Hemang Patel | Full-Stack Developer',
+    description: 'Full-Stack Developer based in Etobicoke, Ontario, Canada. Building scalable, user-friendly web applications.',
   },
   robots: {
     index: true,

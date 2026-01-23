@@ -3,15 +3,16 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTheme } from './ThemeProvider'
-import { Moon, Sun, Menu, X } from 'lucide-react'
+import { Moon, Sun, Menu, X, Github, Linkedin } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { siteConfig } from '@/lib/site-config'
+import CommandPalette from './CommandPalette'
 
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/projects', label: 'Projects' },
-  { href: '/data-ml', label: 'Data & ML' },
   { href: '/resume', label: 'Resume' },
   { href: '/contact', label: 'Contact' },
 ]
@@ -34,7 +35,11 @@ export default function Header() {
             href="/" 
             className="text-lg font-bold text-gray-900 dark:text-white hover:text-accent transition-colors duration-200 relative group"
           >
-            <span className="relative z-10">Portfolio</span>
+            <span className="relative z-10 flex items-center gap-2">
+              <span className="text-accent">&lt;</span>
+              <span>{siteConfig.name.split(' ')[0]}</span>
+              <span className="text-accent">/&gt;</span>
+            </span>
             <span className="absolute inset-0 bg-accent/10 rounded-md scale-0 group-hover:scale-100 transition-transform duration-200 origin-left"></span>
           </Link>
 
@@ -59,10 +64,19 @@ export default function Header() {
                 </Link>
               )
             })}
+            <div className="hidden md:flex items-center gap-1 ml-2">
+              <CommandPalette />
+              <a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all hover:scale-110" aria-label="GitHub">
+                <Github className="w-4.5 h-4.5 text-gray-600 dark:text-gray-400" />
+              </a>
+              <a href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all hover:scale-110" aria-label="LinkedIn">
+                <Linkedin className="w-4.5 h-4.5 text-gray-600 dark:text-gray-400" />
+              </a>
+            </div>
             {mounted && (
               <button
                 onClick={toggleTheme}
-                className="ml-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all duration-200 hover:scale-110 active:scale-95"
+                className="ml-1 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all duration-200 hover:scale-110 active:scale-95"
                 aria-label="Toggle dark mode"
               >
                 {theme === 'dark' ? (

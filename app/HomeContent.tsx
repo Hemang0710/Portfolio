@@ -2,7 +2,14 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight, Download, Code, Database, TrendingUp, Sparkles, Zap } from 'lucide-react'
+import { ArrowRight, Download, Code, Database, TrendingUp, Sparkles, Zap, MapPin } from 'lucide-react'
+import TypingAnimation from '@/components/TypingAnimation'
+import ParticleBackground from '@/components/ParticleBackground'
+import CanadianMarketBadge from '@/components/CanadianMarketBadge'
+import InteractiveTerminal from '@/components/InteractiveTerminal'
+import CodeShowcase from '@/components/CodeShowcase'
+import TechStackVisualization from '@/components/TechStackVisualization'
+import { siteConfig } from '@/lib/site-config'
 
 export default function HomeContent() {
   const containerVariants = {
@@ -29,36 +36,36 @@ export default function HomeContent() {
   }
 
   const skills = [
-    { icon: Database, label: 'Data Engineering', color: 'from-blue-500 to-cyan-500' },
-    { icon: Code, label: 'Backend Development', color: 'from-purple-500 to-pink-500' },
-    { icon: TrendingUp, label: 'Machine Learning', color: 'from-green-500 to-emerald-500' },
-    { icon: Sparkles, label: 'Analytics', color: 'from-orange-500 to-red-500' },
+    { icon: Code, label: 'Frontend Development', color: 'from-blue-500 to-cyan-500' },
+    { icon: Database, label: 'Backend Development', color: 'from-purple-500 to-pink-500' },
+    { icon: TrendingUp, label: 'Full-Stack Solutions', color: 'from-green-500 to-emerald-500' },
+    { icon: Sparkles, label: 'Web Applications', color: 'from-orange-500 to-red-500' },
   ]
 
   const capabilities = [
     {
+      icon: Code,
+      title: 'Frontend Development',
+      description: 'Build responsive and interactive user interfaces using React, React Native, HTML5, CSS3, and Bootstrap. Focus on creating seamless user experiences across all devices.',
+      highlight: 'Modern UI/UX',
+    },
+    {
       icon: Database,
-      title: 'Data Engineering',
-      description: 'Design and implement robust ETL pipelines, data warehouses, and real-time processing systems using modern cloud technologies. Experience with Apache Airflow, dbt, and cloud data platforms.',
-      highlight: 'Scalable Infrastructure',
+      title: 'Backend Development',
+      description: 'Develop scalable REST APIs and backend services using Node.js, Express.js, Spring Boot, Flask, and FastAPI. Design robust server-side logic and database integrations.',
+      highlight: 'RESTful APIs',
     },
     {
       icon: TrendingUp,
-      title: 'Machine Learning',
-      description: 'Build production-ready predictive models and recommendation systems. From feature engineering to model deployment, ensuring reliability and performance at scale.',
-      highlight: 'Production ML',
-    },
-    {
-      icon: Code,
-      title: 'Backend Development',
-      description: 'Develop scalable REST APIs and microservices using Python, Node.js, and cloud platforms. Focus on performance, reliability, and maintainable code architecture.',
-      highlight: 'High Performance',
+      title: 'Full-Stack Solutions',
+      description: 'Create end-to-end web applications from frontend to backend. Experience with MERN stack, integrating databases (MongoDB, MySQL, PostgreSQL, Firebase) and deploying scalable systems.',
+      highlight: 'End-to-End',
     },
     {
       icon: Zap,
-      title: 'Analytics & Insights',
-      description: 'Create interactive dashboards and data visualizations that transform raw data into actionable business intelligence. Turn complex datasets into clear narratives.',
-      highlight: 'Data-Driven Decisions',
+      title: 'Web Technologies',
+      description: 'Work with modern web technologies including JavaScript, Python, Java, PHP, and .NET. Implement AI-driven features, web scraping, and real-time data processing.',
+      highlight: 'Modern Stack',
     },
   ]
 
@@ -68,8 +75,9 @@ export default function HomeContent() {
       <section className="relative section-padding overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(37,99,235,0.05),transparent_50%)]"></div>
+        <ParticleBackground />
         
-        <div className="container-custom relative">
+        <div className="container-custom relative z-10">
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -78,12 +86,13 @@ export default function HomeContent() {
           >
             <motion.div
               variants={itemVariants}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-8"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-8 backdrop-blur-sm"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
               </span>
+              <MapPin className="w-3.5 h-3.5" />
               Available for opportunities in Canada
             </motion.div>
 
@@ -91,43 +100,86 @@ export default function HomeContent() {
               variants={itemVariants}
               className="heading-1 mb-6"
             >
-              <span className="gradient-text">Data & Software Developer</span>
+              <span className="gradient-text">Hi, I&apos;m {siteConfig.name.split(' ')[0]}</span>
               <br />
               <span className="text-gray-600 dark:text-gray-400 font-normal text-3xl md:text-4xl lg:text-5xl">
-                Building scalable, data-driven systems
+                I build{' '}
+                <TypingAnimation
+                  words={['web applications', 'REST APIs', 'responsive UIs', 'full-stack solutions', 'scalable systems']}
+                  className="text-accent font-semibold"
+                />
               </span>
             </motion.h1>
 
             <motion.p
               variants={itemVariants}
-              className="text-body max-w-2xl mx-auto mb-10"
+              className="text-body max-w-2xl mx-auto mb-6"
             >
-              Transforming complex data into actionable insights through modern engineering practices, 
-              machine learning, and robust backend systems. Based in <span className="font-semibold text-gray-900 dark:text-gray-100">Ontario, Canada</span>, 
-              focused on delivering production-ready solutions.
+              An entry-level <span className="font-semibold text-gray-900 dark:text-gray-100">Full-Stack Developer</span> based in 
+              <span className="font-semibold text-gray-900 dark:text-gray-100"> Etobicoke, Ontario, Canada</span>. 
+              I build web applications using React, Node.js, Express, and modern databases. 
+              Passionate about creating scalable, user-friendly applications and continuously learning new technologies.
             </motion.p>
 
             <motion.div
               variants={itemVariants}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6"
             >
               <Link 
                 href="/projects" 
                 className="btn-primary inline-flex items-center gap-2 group"
               >
-                View Projects
+                View My Work
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <a
-                href="/resume.pdf"
-                download
+              <Link
+                href="/resume"
                 className="btn-secondary inline-flex items-center gap-2"
               >
                 <Download className="w-4 h-4" />
-                Download Resume
-              </a>
+                View Resume
+              </Link>
+            </motion.div>
+
+            <motion.p
+              variants={itemVariants}
+              className="text-sm text-gray-500 dark:text-gray-400 mb-10"
+            >
+              <kbd className="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-800 font-mono">⌘K</kbd> to search · Try the terminal below
+            </motion.p>
+
+            {/* Canadian Market Badges */}
+            <motion.div
+              variants={itemVariants}
+              className="max-w-3xl mx-auto mb-14"
+            >
+              <CanadianMarketBadge />
+            </motion.div>
+
+            {/* Interactive Terminal */}
+            <motion.div variants={itemVariants} className="mt-6">
+              <InteractiveTerminal />
             </motion.div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Code in Action */}
+      <section className="section-padding-sm bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-950 border-t border-gray-100 dark:border-gray-800">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="heading-2 mb-4">Code in Action</h2>
+            <p className="text-body-sm max-w-2xl mx-auto">
+              Real snippets from my projects. Click through to see production-ready code.
+            </p>
+          </motion.div>
+          <CodeShowcase />
         </div>
       </section>
 
@@ -143,8 +195,8 @@ export default function HomeContent() {
           >
             <h2 className="heading-2 mb-4">Core Expertise</h2>
             <p className="text-body-sm max-w-2xl mx-auto">
-              Specialized in building end-to-end data solutions from ingestion to deployment, 
-              with a focus on scalability and maintainability
+              Specialized in building full-stack web applications from frontend to backend, 
+              with hands-on experience in React, Node.js, and modern databases
             </p>
           </motion.div>
 
@@ -182,10 +234,10 @@ export default function HomeContent() {
               transition={{ duration: 0.6 }}
               className="text-center mb-16"
             >
-              <h2 className="heading-2 mb-4">What I Bring</h2>
+                <h2 className="heading-2 mb-4">What I Bring</h2>
               <p className="text-body-sm max-w-2xl mx-auto">
-                A combination of technical depth and practical experience in building 
-                production-ready data systems
+                A combination of technical skills and practical experience in building 
+                scalable, user-friendly web applications
               </p>
             </motion.div>
 
@@ -220,6 +272,123 @@ export default function HomeContent() {
         </div>
       </section>
 
+      {/* Tech Stack Visualization */}
+      <section className="section-padding-sm bg-gradient-to-b from-white via-gray-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 border-t border-gray-100 dark:border-gray-800">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="heading-2 mb-4">Tech Stack</h2>
+            <p className="text-body-sm max-w-2xl mx-auto">
+              Technologies I work with to build modern, scalable web applications
+            </p>
+          </motion.div>
+          <TechStackVisualization />
+        </div>
+      </section>
+
+      {/* Achievements & Stats */}
+      <section className="section-padding-sm bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 border-t border-gray-100 dark:border-gray-800">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="max-w-5xl mx-auto"
+          >
+            <div className="text-center mb-12">
+              <h2 className="heading-2 mb-4">Experience Highlights</h2>
+              <p className="text-body-sm max-w-2xl mx-auto">
+                Key achievements and experience across different roles
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {[
+                { label: 'Years Experience', value: '3+', icon: '💼' },
+                { label: 'Projects Built', value: '10+', icon: '🚀' },
+                { label: 'Technologies', value: '15+', icon: '⚡' },
+                { label: 'Co-op Experience', value: '1', icon: '🎓' },
+              ].map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="text-center p-6 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-accent/30 transition-all hover:shadow-lg"
+                >
+                  <div className="text-4xl mb-3">{stat.icon}</div>
+                  <div className="text-3xl font-bold text-accent mb-2">{stat.value}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* What I'm Working On */}
+      <section className="section-padding-sm bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 border-t border-gray-100 dark:border-gray-800">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="max-w-4xl mx-auto"
+          >
+            <div className="text-center mb-12">
+              <h2 className="heading-2 mb-4">What I&apos;m Working On</h2>
+              <p className="text-body-sm max-w-2xl mx-auto">
+                Current projects and learning initiatives
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="p-6 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-accent/30 transition-all"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Active Project</h3>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Building web applications with React and Node.js. Working on integrating 
+                  third-party APIs and creating responsive user interfaces. Focus on clean 
+                  code and best practices.
+                </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="p-6 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-accent/30 transition-all"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Learning</h3>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Learning advanced React patterns, Node.js optimization techniques, and 
+                  cloud deployment strategies. Exploring Spring Boot and expanding knowledge 
+                  in database design and API architecture.
+                </p>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="section-padding-sm bg-white dark:bg-gray-900">
         <div className="container-custom">
@@ -235,8 +404,9 @@ export default function HomeContent() {
               <div className="relative text-center">
                 <h2 className="heading-2 mb-4 text-white">Ready to Build Something Great?</h2>
                 <p className="text-lg mb-8 text-blue-100 max-w-xl mx-auto">
-                  Let&apos;s connect and discuss how data-driven solutions can transform your business. 
-                  Open to full-time opportunities, contract work, and meaningful collaborations.
+                  I&apos;m actively seeking opportunities in the Canadian tech market. 
+                  Whether it&apos;s a full-time role, contract work, or a meaningful collaboration, 
+                  let&apos;s connect and discuss how I can help build your next web application.
                 </p>
                 <Link 
                   href="/contact" 

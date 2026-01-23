@@ -2,137 +2,64 @@
 
 import { motion } from 'framer-motion'
 import ProjectCard from '@/components/ProjectCard'
+import { siteConfig } from '@/lib/site-config'
+
+const gh = siteConfig.links.github + '/'
 
 const projects = [
   {
-    title: 'FitFeast - Health & Nutrition App',
-    description: 'A comprehensive health and nutrition application that provides personalized meal recommendations, tracks nutritional intake, and helps users achieve their fitness goals through data-driven insights.',
-    problem: 'Users struggle to maintain balanced nutrition while tracking their fitness goals. Existing solutions lack personalization and don&apos;t leverage user data effectively to provide actionable recommendations.',
-    solution: 'Built a recommendation engine using collaborative filtering and content-based filtering. Implemented real-time nutritional tracking with a RESTful API backend, and created interactive dashboards for users to visualize their progress over time.',
-    techStack: ['Python', 'Flask', 'PostgreSQL', 'Scikit-learn', 'React', 'Chart.js', 'Docker', 'AWS'],
+    title: 'FitFeast – Health & Nutrition Web Application',
+    description: 'A comprehensive health and nutrition web application that provides BMI tracking, meal history management, and real-time nutritional insights through third-party API integrations.',
+    problem: 'Users need a centralized platform to track their health metrics, meal history, and nutritional intake. Existing solutions lack integration with reliable nutritional data sources and don&apos;t provide scalable data models for user information.',
+    solution: 'Built backend services and APIs to support a BMI and nutrition tracking platform using Next.js, MongoDB, and Node-based services. Designed scalable data models for users, meal history, and health metrics. Integrated third-party APIs (USDA FoodData Central, Edamam) to deliver real-time nutritional insights.',
+    techStack: ['Next.js', 'MongoDB', 'Node.js', 'REST APIs', 'USDA FoodData Central API', 'Edamam API'],
     metrics: [
-      { label: 'Accuracy', value: '87%' },
-      { label: 'User Engagement', value: '+45%' },
-      { label: 'Response Time', value: '<200ms' },
+      { label: 'Data Models', value: '3 Core' },
+      { label: 'API Integrations', value: '2' },
+      { label: 'Focus', value: 'Scalability' },
     ],
-    githubUrl: 'https://github.com/yourusername/fitfeast',
-    demoUrl: 'https://fitfeast-demo.vercel.app',
+    githubUrl: gh + 'fitfeast',
     architecture: `┌─────────────┐
-│   React UI   │
+│  Next.js UI  │
 └──────┬───────┘
        │
 ┌──────▼───────┐
-│  Flask API   │
+│  Node.js API │
 └──────┬───────┘
        │
 ┌──────▼───────┐     ┌──────────────┐
-│  PostgreSQL  │◄────┤  ML Service  │
+│   MongoDB    │◄────┤ Third-party  │
+│  Database    │     │   APIs       │
 └──────────────┘     └──────────────┘`,
   },
   {
-    title: 'Event Attendance Prediction',
-    description: 'Machine learning model that predicts event attendance rates to help organizers optimize planning, resource allocation, and marketing strategies based on historical data and external factors.',
-    problem: 'Event organizers face challenges in predicting attendance, leading to over or under-allocation of resources, poor planning, and missed opportunities for optimization.',
-    solution: 'Developed a time series forecasting model using XGBoost and feature engineering techniques. Incorporated external factors like weather, day of week, and historical patterns. Built a pipeline that processes real-time data and provides predictions with confidence intervals.',
-    techStack: ['Python', 'XGBoost', 'Pandas', 'NumPy', 'Scikit-learn', 'Apache Airflow', 'FastAPI', 'Plotly'],
+    title: 'Real Estate Listing Platform | MERN Stack',
+    description: 'A full-stack real estate platform that aggregates and analyzes large housing datasets, providing analytics results through APIs and visualization tools.',
+    problem: 'Real estate platforms need efficient ways to process large housing datasets, perform analytics, and serve results to visualization tools. Existing solutions lack optimized backend architecture and ETL workflows.',
+    solution: 'Developed backend logic for aggregating and analyzing large housing datasets. Designed ETL workflows and APIs to serve analytics results to visualization tools. Focused on performance optimization and clean backend architecture using the MERN stack.',
+    techStack: ['MongoDB', 'Express.js', 'React', 'Node.js', 'ETL Workflows', 'REST APIs'],
     metrics: [
-      { label: 'MAE', value: '12.3' },
-      { label: 'R² Score', value: '0.84' },
-      { label: 'Prediction Accuracy', value: '82%' },
+      { label: 'Stack', value: 'MERN' },
+      { label: 'Focus', value: 'Performance' },
+      { label: 'Architecture', value: 'Clean' },
     ],
-    githubUrl: 'https://github.com/yourusername/event-prediction',
-    architecture: `Data Sources
-    │
-    ├─ Historical Events
-    ├─ Weather API
-    └─ External Factors
+    githubUrl: gh + 'real-estate-platform',
+    architecture: `Housing Datasets
          │
     ┌────▼────┐
     │  ETL    │
+    │Workflows│
     └────┬────┘
          │
     ┌────▼────┐
-    │ Feature │
-    │Engineering│
+    │Backend  │
+    │  Logic  │
     └────┬────┘
          │
-    ┌────▼────┐
-    │  Model  │
-    │ Training│
-    └────┬────┘
-         │
-    ┌────▼────┐
-    │Prediction│
-    │  API    │
-    └─────────┘`,
-  },
-  {
-    title: 'Food Drive Demand Forecasting',
-    description: 'Volunteer project that forecasts food drive demand to help non-profit organizations optimize inventory management, reduce waste, and better serve communities in need.',
-    problem: 'Non-profit organizations running food drives struggle with inventory management, often facing shortages during high-demand periods or waste during low-demand periods due to lack of predictive insights.',
-    solution: 'Created a demand forecasting model using time series analysis and seasonal decomposition. Built automated data pipelines to collect historical donation and distribution data. Developed a dashboard for volunteers to visualize predictions and adjust operations accordingly.',
-    techStack: ['Python', 'Prophet', 'Pandas', 'SQL', 'Streamlit', 'PostgreSQL', 'Cron'],
-    metrics: [
-      { label: 'Waste Reduction', value: '-35%' },
-      { label: 'Forecast Accuracy', value: '78%' },
-      { label: 'Coverage Rate', value: '92%' },
-    ],
-    githubUrl: 'https://github.com/yourusername/food-drive-forecasting',
-    architecture: `Historical Data
-         │
-    ┌────▼────┐
-    │  Data   │
-    │Cleansing│
-    └────┬────┘
-         │
-    ┌────▼────┐
-    │Prophet  │
-    │  Model│
-    └────┬────┘
-         │
-    ┌────▼────┐
-    │Dashboard│
-    │Streamlit│
-    └─────────┘`,
-  },
-  {
-    title: 'Real Estate Analytics Platform',
-    description: 'A comprehensive analytics platform that provides insights into real estate market trends, property valuations, and investment opportunities through advanced data analysis and visualization.',
-    problem: 'Real estate investors and agents need better tools to analyze market trends, compare properties, and make data-driven investment decisions. Existing solutions are fragmented and lack comprehensive analytics.',
-    solution: 'Built a data pipeline that aggregates real estate data from multiple sources. Implemented property valuation models using regression techniques and created interactive dashboards for market analysis. Developed APIs for programmatic access to insights.',
-    techStack: ['Python', 'Django', 'PostgreSQL', 'Scikit-learn', 'React', 'D3.js', 'Redis', 'Celery'],
-    metrics: [
-      { label: 'Data Points', value: '500K+' },
-      { label: 'Valuation Accuracy', value: '89%' },
-      { label: 'API Response', value: '<150ms' },
-    ],
-    githubUrl: 'https://github.com/yourusername/real-estate-analytics',
-    demoUrl: 'https://real-estate-analytics.vercel.app',
-    architecture: `Data Sources
-    │
-    ├─ MLS API
-    ├─ Public Records
-    └─ Market Data
-         │
-    ┌────▼────┐
-    │  ETL    │
-    │ Pipeline│
-    └────┬────┘
-         │
-    ┌────▼────┐
-    │PostgreSQL│
-    │Database │
-    └────┬────┘
-         │
-    ┌────▼────┐
-    │  Django │
-    │   API   │
-    └────┬────┘
-         │
-    ┌────▼────┐
-    │  React  │
-    │Frontend │
-    └─────────┘`,
+    ┌────▼────┐     ┌──────────────┐
+    │   APIs  │────►│Visualization│
+    │         │     │    Tools    │
+    └─────────┘     └──────────────┘`,
   },
 ]
 
@@ -148,7 +75,7 @@ export default function ProjectsContent() {
           >
             <h1 className="heading-1 mb-6">Projects</h1>
             <p className="text-xl text-gray-600 dark:text-gray-400">
-              Data-driven solutions that solve real-world problems
+              Full-stack web applications built with modern technologies
             </p>
           </motion.div>
 

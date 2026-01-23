@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import ResumeContent from './ResumeContent'
 
 export const metadata: Metadata = {
-  title: 'Resume | Data & Software Developer',
-  description: 'Download my resume or view online. ATS-friendly resume showcasing data engineering, machine learning, and backend development skills.',
+  title: 'Resume | Full-Stack Developer',
+  description: 'Download my resume or view online. ATS-friendly resume showcasing full-stack development skills with React, Node.js, Express, and modern databases.',
 }
 
 export default function Resume() {

@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import HomeContent from './HomeContent'
 
 export const metadata: Metadata = {
-  title: 'Data & Software Developer | Building Scalable Data-Driven Systems',
-  description: 'Entry-Level Data & Software Developer based in Ontario, Canada. Specialized in data engineering, machine learning, backend development, and analytics.',
+  title: 'Hemang Patel | Full-Stack Developer | Building Scalable Web Applications',
+  description: 'Full-Stack Developer based in Etobicoke, Ontario, Canada. Building scalable, user-friendly web applications with React, Node.js, Express, and modern databases. Open to opportunities in the Canadian tech market.',
 }
 
 export default function Home() {

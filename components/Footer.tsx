@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import { Github, Linkedin, Mail, MapPin } from 'lucide-react'
+import { siteConfig } from '@/lib/site-config'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
+  const { links, name, location } = siteConfig
 
   return (
     <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
@@ -10,11 +12,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           {/* About */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">About</h3>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{name}</h3>
             <p className="text-body-sm leading-relaxed">
-              Data & Software Developer building scalable, data-driven systems. 
-              Based in <span className="font-medium text-gray-900 dark:text-white">Ontario, Canada</span>, 
-              focused on delivering production-ready solutions.
+              Full-Stack Developer building scalable, user-friendly web applications. 
+              Based in <span className="font-medium text-gray-900 dark:text-white">{location}</span>, 
+              focused on delivering production-ready solutions using React, Node.js, and modern web technologies.
             </p>
           </div>
 
@@ -25,7 +27,6 @@ export default function Footer() {
               {[
                 { href: '/about', label: 'About Me' },
                 { href: '/projects', label: 'Projects' },
-                { href: '/data-ml', label: 'Data & ML' },
                 { href: '/resume', label: 'Resume' },
                 { href: '/contact', label: 'Contact' },
               ].map((link) => (
@@ -48,11 +49,11 @@ export default function Footer() {
             <div className="space-y-4">
               <div className="flex items-center gap-2 text-body-sm">
                 <MapPin className="w-4 h-4 text-gray-500" />
-                <span>Ontario, Canada</span>
+                <span>{location}</span>
               </div>
               <div className="flex items-center gap-3 mt-6">
                 <a
-                  href="https://github.com"
+                  href={links.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800/50 transition-all duration-200 hover:scale-110 active:scale-95 border border-transparent hover:border-gray-300 dark:hover:border-gray-700"
@@ -61,7 +62,7 @@ export default function Footer() {
                   <Github className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                 </a>
                 <a
-                  href="https://linkedin.com"
+                  href={links.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800/50 transition-all duration-200 hover:scale-110 active:scale-95 border border-transparent hover:border-gray-300 dark:hover:border-gray-700"
@@ -70,7 +71,7 @@ export default function Footer() {
                   <Linkedin className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                 </a>
                 <a
-                  href="mailto:your.email@example.com"
+                  href={`mailto:${links.email}`}
                   className="p-2.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800/50 transition-all duration-200 hover:scale-110 active:scale-95 border border-transparent hover:border-gray-300 dark:hover:border-gray-700"
                   aria-label="Email"
                 >
@@ -83,9 +84,9 @@ export default function Footer() {
 
         <div className="pt-8 border-t border-gray-200 dark:border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-            <p>&copy; {currentYear} Data & Software Developer. All rights reserved.</p>
+            <p>&copy; {currentYear} {name}. All rights reserved.</p>
             <p className="text-xs">
-              Built with Next.js, TypeScript & Tailwind CSS
+              Built with <span className="text-accent">Next.js</span>, <span className="text-accent">TypeScript</span> & <span className="text-accent">Tailwind CSS</span>
             </p>
           </div>
         </div>
