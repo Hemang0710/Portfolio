@@ -71,6 +71,18 @@ A modern, professional portfolio website for an Entry-Level Data & Software Deve
 4. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
+## ⚙️ Configure your links
+
+Update **`lib/site-config.ts`** with your real profile URLs. All LinkedIn, GitHub, email, resume, and project links across the site use this file. When visitors click **LinkedIn**, **GitHub**, or **Email**, they will be redirected to these URLs.
+
+- `links.linkedin` — your LinkedIn profile (e.g. `https://www.linkedin.com/in/your-username`)
+- `links.github` — your GitHub profile
+- `links.email` — your email (used for `mailto:` and Contact page)
+- `links.resumePdf` — path to your resume PDF in `/public`, or a full URL
+- `githubUsername` — used for project repo links and GitHub stats
+
+Put your resume PDF in `/public` (e.g. `Hemang_Patel_Resume.pdf`) if you use a path like `/Hemang_Patel_Resume.pdf`.
+
 ## 🚢 Deployment
 
 ### Deploy to Vercel (Recommended)

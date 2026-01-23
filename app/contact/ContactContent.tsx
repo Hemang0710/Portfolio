@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { useState, FormEvent } from 'react'
 import { Mail, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react'
+import { siteConfig } from '@/lib/site-config'
 
 interface FormData {
   name: string
@@ -19,6 +20,7 @@ interface FormErrors {
 }
 
 export default function ContactContent() {
+  const { links, location } = siteConfig
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -128,7 +130,7 @@ export default function ContactContent() {
                       <h3 className="font-semibold text-gray-900 dark:text-white">Location</h3>
                     </div>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">
-                      Ontario, Canada
+                      {location}
                     </p>
                   </div>
 
@@ -138,10 +140,10 @@ export default function ContactContent() {
                       <h3 className="font-semibold text-gray-900 dark:text-white">Email</h3>
                     </div>
                     <a
-                      href="mailto:your.email@example.com"
+                      href={`mailto:${links.email}`}
                       className="text-gray-600 dark:text-gray-400 text-sm hover:text-accent transition-colors"
                     >
-                      your.email@example.com
+                      {links.email}
                     </a>
                   </div>
 
@@ -234,7 +236,7 @@ export default function ContactContent() {
                             ? 'border-red-500 focus:ring-red-500'
                             : 'border-gray-300 dark:border-gray-700 focus:ring-accent'
                         } bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-colors`}
-                        placeholder="your.email@example.com"
+                        placeholder={links.email}
                         aria-invalid={!!errors.email}
                         aria-describedby={errors.email ? 'email-error' : undefined}
                       />
