@@ -2,8 +2,9 @@ import type { Metadata } from 'next'
 import HomeContent from './HomeContent'
 
 export const metadata: Metadata = {
-  title: 'Hemang Patel | Full-Stack Developer | Building Scalable Web Applications',
-  description: 'Full-Stack Developer based in Etobicoke, Ontario, Canada. Building scalable, user-friendly web applications with React, Node.js, Express, and modern databases. Open to opportunities in the Canadian tech market.',
+  title: 'Hemang Patel | AI & Backend Engineer — LLM Systems & Data Pipelines',
+  description:
+    'AI & Backend Engineer building LLM-powered systems, FastAPI services, and data pipelines. Python, RAG, LangChain, and cloud-native backend architecture. Greater Toronto Area, Canada.',
 }
 
 export default function Home() {

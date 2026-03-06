@@ -88,11 +88,10 @@ export default function ResumeContent() {
                   Objective
                 </h3>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  Entry-level Full-Stack Developer with hands-on experience building web applications using React, 
-                  Node.js, Express, REST APIs, and SQL/NoSQL databases. Recent graduate in Information Technology 
-                  Solutions with strong project and internship experience in frontend UI development and backend API 
-                  design. Passionate about building scalable, user-friendly applications and continuously learning 
-                  modern web technologies.
+                  AI & Backend Engineer with hands-on experience building Python‑powered backend systems, LLM‑driven applications,
+                  and data pipelines. Recent graduate in Information Technology Solutions with project and internship experience
+                  in REST API development, database design, and AI integration. Passionate about building scalable, cloud‑native
+                  backend systems with clean architecture, comprehensive testing, and production‑grade observability.
                 </p>
               </section>
 
@@ -103,39 +102,39 @@ export default function ResumeContent() {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Languages</h4>
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Backend</h4>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      JavaScript, Java, Python, PHP, .NET
+                      Python, FastAPI, REST APIs, Node.js, Express.js, Flask
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">AI / ML</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      LLMs (GPT-4, Claude), RAG, LangChain, LangGraph, Prompt Engineering
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Data</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      PostgreSQL, MySQL, MongoDB, Pandas, ETL Pipelines, Data Modeling
                     </p>
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Frontend</h4>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      HTML5, CSS3, React, React Native, Bootstrap
+                      React, React Native, Next.js, TypeScript, Tailwind CSS
                     </p>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Backend</h4>
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Tools & Infra</h4>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Node.js, Express.js, Spring Boot, RESTful APIs, Flask, FastAPI
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Databases</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      MongoDB, MySQL, PostgreSQL, Firebase
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Tools/Cloud</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Git/GitHub, AWS (basic)
+                      Cursor, GitHub Copilot, Docker, Git, CI/CD, AWS, Redis, Linux
                     </p>
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Concepts</h4>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      OOP, Data Structures, Agile/Scrum
+                      API‑first design, RBAC, Data Structures, Agile/Scrum, Testing
                     </p>
                   </div>
                 </div>
@@ -252,23 +251,31 @@ export default function ResumeContent() {
                 <div className="space-y-4">
                   <div>
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
-                      FitFeast – Health & Nutrition Web Application
+                      RAG‑Powered Career Assistant
                     </h4>
                     <p className="text-sm text-gray-700 dark:text-gray-300">
-                      Built backend services and APIs to support a BMI and nutrition tracking platform using Next.js, 
-                      MongoDB, and Node-based services. Designed data models for users, meal history, and health metrics 
-                      with a focus on scalability and maintainability. Integrated third-party APIs (USDA FoodData Central, 
-                      Edamam) to deliver real-time nutritional insights.
+                      Built a retrieval‑augmented generation system with FastAPI, LangChain, and Pinecone. Ingests career
+                      resources, generates vector embeddings, and answers job‑search questions with cited responses.
+                      Includes JWT auth, rate limiting, and structured logging.
                     </p>
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
-                      Real Estate Listing Platform | MERN Stack
+                      Job Market Analytics Data Pipeline
                     </h4>
                     <p className="text-sm text-gray-700 dark:text-gray-300">
-                      Developed backend logic for aggregating and analysing large housing datasets. Designed ETL workflows 
-                      and APIs to serve analytics results to visualization tools. Focused on performance optimization and 
-                      clean backend architecture.
+                      Python ETL pipeline that ingests job postings, normalizes data, loads into a star‑schema warehouse,
+                      and exposes a versioned REST API for trend analytics. Features monitoring, backfill support, and
+                      Pydantic validation.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
+                      AI‑Assisted CRM / Helpdesk Backend
+                    </h4>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                      Ticket‑management API with RBAC, cursor‑based pagination, and LLM‑powered ticket summarization
+                      and reply suggestions. Implements circuit‑breaker patterns and token budgets for AI service reliability.
                     </p>
                   </div>
                 </div>

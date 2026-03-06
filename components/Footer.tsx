@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { Github, Linkedin, Mail, MapPin } from 'lucide-react'
 import { siteConfig } from '@/lib/site-config'
 
@@ -12,32 +11,36 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           {/* About */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{name}</h3>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+              <span className="text-accent font-mono text-sm">&gt;_</span>
+              {name}
+            </h3>
             <p className="text-body-sm leading-relaxed">
-              Full-Stack Developer building scalable, user-friendly web applications. 
-              Based in <span className="font-medium text-gray-900 dark:text-white">{location}</span>, 
-              focused on delivering production-ready solutions using React, Node.js, and modern web technologies.
+              AI &amp; Backend Engineer building LLM‑powered systems, FastAPI services, and data pipelines.
+              Based in <span className="font-medium text-gray-900 dark:text-white">{location}</span>,
+              focused on delivering scalable, cloud‑native backend solutions.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Navigate</h3>
             <ul className="space-y-3">
               {[
-                { href: '/about', label: 'About Me' },
-                { href: '/projects', label: 'Projects' },
-                { href: '/resume', label: 'Resume' },
-                { href: '/contact', label: 'Contact' },
+                { href: '#about', label: 'About' },
+                { href: '#skills', label: 'Skills & Tech' },
+                { href: '#projects', label: 'Projects' },
+                { href: '#experience', label: 'Experience' },
+                { href: '#contact', label: 'Contact' },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link 
-                    href={link.href} 
+                  <a
+                    href={link.href}
                     className="text-body-sm hover:text-accent transition-colors duration-200 inline-flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-accent transition-colors"></span>
                     {link.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -86,7 +89,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
             <p>&copy; {currentYear} {name}. All rights reserved.</p>
             <p className="text-xs">
-              Built with <span className="text-accent">Next.js</span>, <span className="text-accent">TypeScript</span> & <span className="text-accent">Tailwind CSS</span>
+              Built with <span className="text-accent">Next.js</span>, <span className="text-accent">TypeScript</span> &amp; <span className="text-accent">Tailwind CSS</span>
             </p>
           </div>
         </div>

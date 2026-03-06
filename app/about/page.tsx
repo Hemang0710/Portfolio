@@ -2,11 +2,11 @@ import type { Metadata } from 'next'
 import AboutContent from './AboutContent'
 
 export const metadata: Metadata = {
-  title: 'About Me | Full-Stack Developer',
-  description: 'Learn about my background, education at Humber College, industry experience, and technical skills in full-stack web development with React, Node.js, and modern databases.',
+  title: 'About | Hemang Patel — AI & Backend Engineer',
+  description:
+    'AI & Backend Engineer based in the Greater Toronto Area, Canada. Python, FastAPI, LLMs, RAG pipelines, and data engineering.',
 }
 
 export default function About() {
   return <AboutContent />
 }
-

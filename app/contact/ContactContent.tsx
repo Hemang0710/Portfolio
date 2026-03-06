@@ -1,335 +1,125 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useState, FormEvent } from 'react'
-import { Mail, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react'
+import { Mail, Linkedin, Github, MapPin, Send, CheckCircle2 } from 'lucide-react'
 import { siteConfig } from '@/lib/site-config'
-
-interface FormData {
-  name: string
-  email: string
-  subject: string
-  message: string
-}
-
-interface FormErrors {
-  name?: string
-  email?: string
-  subject?: string
-  message?: string
-}
+import { useState } from 'react'
 
 export default function ContactContent() {
-  const { links, location } = siteConfig
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  })
-  const [errors, setErrors] = useState<FormErrors>({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null)
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' })
+  const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
 
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRegex.test(email)
-  }
-
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {}
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required'
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required'
-    } else if (!validateEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email address'
-    }
-
-    if (!formData.subject.trim()) {
-      newErrors.subject = 'Subject is required'
-    }
-
-    if (!formData.message.trim()) {
-      newErrors.message = 'Message is required'
-    } else if (formData.message.trim().length < 10) {
-      newErrors.message = 'Message must be at least 10 characters long'
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-
-    if (!validateForm()) {
-      return
-    }
-
-    setIsSubmitting(true)
-    setSubmitStatus(null)
-
-    try {
-      // In a real implementation, this would send data to an API endpoint
-      // Simulating API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: '',
-      })
-      setSubmitStatus('success')
-    } catch (error) {
-      setSubmitStatus('error')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-    // Clear error when user starts typing
-    if (errors[name as keyof FormErrors]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }))
-    }
+    setFormStatus('sending')
+    const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`)
+    const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`)
+    window.location.href = `mailto:${siteConfig.links.email}?subject=${subject}&body=${body}`
+    setTimeout(() => setFormStatus('sent'), 1000)
   }
 
   return (
-    <div className="min-h-screen">
-      <section className="section-padding bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-4xl mx-auto"
-          >
-            <div className="text-center mb-12">
-              <h1 className="heading-1 mb-6">Get In Touch</h1>
-              <p className="text-xl text-gray-600 dark:text-gray-400">
-                I&apos;m always open to discussing new opportunities, projects, or collaborations
-              </p>
+    <div className="min-h-screen bg-white dark:bg-gray-950">
+      <section className="container-custom section-padding">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="max-w-5xl mx-auto"
+        >
+          <h1 className="heading-1 text-3xl md:text-4xl lg:text-5xl mb-4">
+            <span className="gradient-text">Let&apos;s Connect</span>
+          </h1>
+          <p className="text-body max-w-2xl mb-12">
+            Looking for an AI / Backend / Data engineer who ships quality code? I&apos;m actively seeking opportunities
+            in the Canadian market — let&apos;s talk.
+          </p>
+
+          <div className="grid lg:grid-cols-5 gap-12">
+            {/* Form */}
+            <div className="lg:col-span-3">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Name</label>
+                    <input
+                      id="name"
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all text-sm"
+                      placeholder="Your name"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
+                    <input
+                      id="email"
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all text-sm"
+                      placeholder="you@company.com"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Message</label>
+                  <textarea
+                    id="message"
+                    required
+                    rows={6}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all text-sm resize-none"
+                    placeholder="Tell me about the role or project…"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={formStatus === 'sending'}
+                  className="btn-primary inline-flex items-center gap-2"
+                >
+                  {formStatus === 'sent' ? (
+                    <>Sent! <CheckCircle2 className="w-4 h-4" /></>
+                  ) : (
+                    <>Send Message <Send className="w-4 h-4" /></>
+                  )}
+                </button>
+              </form>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Contact Information */}
-              <div className="lg:col-span-1">
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 space-y-6">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <MapPin className="w-5 h-5 text-accent" />
-                      <h3 className="font-semibold text-gray-900 dark:text-white">Location</h3>
-                    </div>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">
-                      {location}
-                    </p>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <Mail className="w-5 h-5 text-accent" />
-                      <h3 className="font-semibold text-gray-900 dark:text-white">Email</h3>
-                    </div>
-                    <a
-                      href={`mailto:${links.email}`}
-                      className="text-gray-600 dark:text-gray-400 text-sm hover:text-accent transition-colors"
-                    >
-                      {links.email}
-                    </a>
-                  </div>
-
-                  <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
-                      Availability
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">
-                      Open to full-time opportunities, contract work, and freelance projects. 
-                      Available for interviews and discussions.
-                    </p>
+            {/* Sidebar */}
+            <div className="lg:col-span-2 space-y-6">
+              <div className="p-6 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Direct Links</h3>
+                <div className="space-y-4">
+                  <a href={`mailto:${siteConfig.links.email}`} className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 hover:text-accent transition-colors">
+                    <Mail className="w-4 h-4" /> {siteConfig.links.email}
+                  </a>
+                  <a href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 hover:text-accent transition-colors">
+                    <Linkedin className="w-4 h-4" /> LinkedIn Profile
+                  </a>
+                  <a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 hover:text-accent transition-colors">
+                    <Github className="w-4 h-4" /> GitHub — {siteConfig.githubUsername}
+                  </a>
+                  <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                    <MapPin className="w-4 h-4" /> {siteConfig.location}
                   </div>
                 </div>
               </div>
-
-              {/* Contact Form */}
-              <div className="lg:col-span-2">
-                <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 md:p-8">
-                  {submitStatus === 'success' && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-3"
-                    >
-                      <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
-                      <p className="text-green-800 dark:text-green-200">
-                        Thank you! Your message has been sent successfully.
-                      </p>
-                    </motion.div>
-                  )}
-
-                  {submitStatus === 'error' && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-3"
-                    >
-                      <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
-                      <p className="text-red-800 dark:text-red-200">
-                        Something went wrong. Please try again later.
-                      </p>
-                    </motion.div>
-                  )}
-
-                  <div className="space-y-6">
-                    <div>
-                      <label
-                        htmlFor="name"
-                        className="block text-sm font-medium text-gray-900 dark:text-white mb-2"
-                      >
-                        Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className={`w-full px-4 py-3 rounded-lg border ${
-                          errors.name
-                            ? 'border-red-500 focus:ring-red-500'
-                            : 'border-gray-300 dark:border-gray-700 focus:ring-accent'
-                        } bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-colors`}
-                        placeholder="Your name"
-                        aria-invalid={!!errors.name}
-                        aria-describedby={errors.name ? 'name-error' : undefined}
-                      />
-                      {errors.name && (
-                        <p id="name-error" className="mt-1 text-sm text-red-600 dark:text-red-400">
-                          {errors.name}
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium text-gray-900 dark:text-white mb-2"
-                      >
-                        Email <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className={`w-full px-4 py-3 rounded-lg border ${
-                          errors.email
-                            ? 'border-red-500 focus:ring-red-500'
-                            : 'border-gray-300 dark:border-gray-700 focus:ring-accent'
-                        } bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-colors`}
-                        placeholder={links.email}
-                        aria-invalid={!!errors.email}
-                        aria-describedby={errors.email ? 'email-error' : undefined}
-                      />
-                      {errors.email && (
-                        <p id="email-error" className="mt-1 text-sm text-red-600 dark:text-red-400">
-                          {errors.email}
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="subject"
-                        className="block text-sm font-medium text-gray-900 dark:text-white mb-2"
-                      >
-                        Subject <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="subject"
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleChange}
-                        className={`w-full px-4 py-3 rounded-lg border ${
-                          errors.subject
-                            ? 'border-red-500 focus:ring-red-500'
-                            : 'border-gray-300 dark:border-gray-700 focus:ring-accent'
-                        } bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-colors`}
-                        placeholder="What's this about?"
-                        aria-invalid={!!errors.subject}
-                        aria-describedby={errors.subject ? 'subject-error' : undefined}
-                      />
-                      {errors.subject && (
-                        <p id="subject-error" className="mt-1 text-sm text-red-600 dark:text-red-400">
-                          {errors.subject}
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="message"
-                        className="block text-sm font-medium text-gray-900 dark:text-white mb-2"
-                      >
-                        Message <span className="text-red-500">*</span>
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        rows={6}
-                        className={`w-full px-4 py-3 rounded-lg border ${
-                          errors.message
-                            ? 'border-red-500 focus:ring-red-500'
-                            : 'border-gray-300 dark:border-gray-700 focus:ring-accent'
-                        } bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-colors resize-none`}
-                        placeholder="Tell me about your project or opportunity..."
-                        aria-invalid={!!errors.message}
-                        aria-describedby={errors.message ? 'message-error' : undefined}
-                      />
-                      {errors.message && (
-                        <p id="message-error" className="mt-1 text-sm text-red-600 dark:text-red-400">
-                          {errors.message}
-                        </p>
-                      )}
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="btn-primary w-full inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <span className="animate-spin">⏳</span>
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-5 h-5" />
-                          Send Message
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </form>
+              <div className="p-6 rounded-xl bg-gradient-to-br from-accent/5 to-emerald/5 border border-accent/10">
+                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                  <span className="font-semibold text-accent">Currently open</span> to full‑time Engineering and Developer
+                  opportunities across Canada. Also happy to discuss contract work or open‑source collaboration.
+                </p>
               </div>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </section>
     </div>
   )
 }
-
