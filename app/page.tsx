@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import HomeContent from './HomeContent'
 
 export const metadata: Metadata = {
-  title: 'Hemang Patel | AI & Backend Engineer — LLM Systems & Data Pipelines',
+  title: 'Hemang Patel | AI Full-Stack & GenAI Engineer',
   description:
-    'AI & Backend Engineer building LLM-powered systems, FastAPI services, and data pipelines. Python, RAG, LangChain, and cloud-native backend architecture. Greater Toronto Area, Canada.',
+    'AI Full-Stack & GenAI Engineer building LLM-powered systems, RAG pipelines, and production full-stack apps with React, Next.js, FastAPI, and Python. Toronto, ON, Canada.',
 }
 
 export default function Home() {

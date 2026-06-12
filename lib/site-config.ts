@@ -7,8 +7,8 @@
 
 export const siteConfig = {
   name: 'Hemang Patel',
-  title: 'AI & Backend Engineer',
-  location: 'Greater Toronto Area, Canada',
+  title: 'AI Full-Stack & GenAI Engineer',
+  location: 'Toronto, ON, Canada',
 
   links: {
     linkedin: 'https://www.linkedin.com/in/hemangpatelj',
@@ -19,5 +19,6 @@ export const siteConfig = {
     portfolioRepo: 'https://github.com/Hemang0710/Portfolio',
   },
 
+  photo: '/hemang-photo.jpg',
   githubUsername: 'Hemang0710',
 } as const

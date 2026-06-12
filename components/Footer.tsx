@@ -16,9 +16,9 @@ export default function Footer() {
               {name}
             </h3>
             <p className="text-body-sm leading-relaxed">
-              AI &amp; Backend Engineer building LLM‑powered systems, FastAPI services, and data pipelines.
+              AI Full‑Stack &amp; GenAI Engineer building LLM‑powered systems, production full‑stack apps, and clean APIs.
               Based in <span className="font-medium text-gray-900 dark:text-white">{location}</span>,
-              focused on delivering scalable, cloud‑native backend solutions.
+              open to full‑time IT roles across Canada.
             </p>
           </div>
 

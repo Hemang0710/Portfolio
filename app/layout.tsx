@@ -3,13 +3,14 @@ import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import AskHemang from '@/components/AskHemang'
 import { ThemeProvider } from '@/components/ThemeProvider'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' })
 
 export const metadata: Metadata = {
-  title: 'Hemang Patel | AI & Backend Engineer',
+  title: 'Hemang Patel | AI Full-Stack & GenAI Engineer',
   description:
     'AI & Backend Engineer building LLM-powered systems, FastAPI services, and data pipelines. Python, RAG, LangChain, vector databases, and cloud-native backend architecture. Based in the Greater Toronto Area, Canada.',
   keywords: [
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Hemang Patel' }],
   openGraph: {
-    title: 'Hemang Patel | AI & Backend Engineer',
+    title: 'Hemang Patel | AI Full-Stack & GenAI Engineer',
     description:
       'Building LLM-powered systems, FastAPI services, and data pipelines. Python, RAG, LangChain, and cloud-native backend architecture.',
     type: 'website',
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Hemang Patel | AI & Backend Engineer',
+    title: 'Hemang Patel | AI Full-Stack & GenAI Engineer',
     description:
       'Building LLM-powered systems, FastAPI services, and data pipelines.',
   },
@@ -65,6 +66,7 @@ export default function RootLayout({
             </main>
             <Footer />
           </div>
+          <AskHemang />
         </ThemeProvider>
       </body>
     </html>

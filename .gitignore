@@ -1,37 +1,69 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
+# ─────────────────────────── Dependencies ───────────────────────────
+# No leading slash → matches node_modules anywhere (incl. nested projects/*).
+node_modules/
 /.pnp
 .pnp.js
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
 
-# testing
+# ─────────────────────────── Build output ───────────────────────────
+.next/
+out/
+build/
+dist/
 /coverage
 
-# next.js
-/.next/
-/out/
+# ───────────────────────── Secrets / env vars ───────────────────────
+# Never commit real credentials or API keys. Only *.example templates are kept.
+.env
+.env.*
+*.local
+!.env.example
+!.env.*.example
 
-# production
-/build
-
-# misc
-.DS_Store
+# Keys / certificates
 *.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_dsa
+*.cert
+secrets.json
+credentials.json
 
-# debug
+# ─────────────────────────── Documentation ──────────────────────────
+# Ignore loose markdown notes/guides, but keep the project README tracked.
+*.md
+!README.md
+
+# ───────────────────────────── Logs ─────────────────────────────────
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# local env files
-.env*.local
-.env
+# ───────────────────────── Editor / OS files ────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.swo
 
-# vercel
-.vercel
-
-# typescript
+# ─────────────────────────── TypeScript ─────────────────────────────
 *.tsbuildinfo
 next-env.d.ts
 
+# ──────────────────────────── Deployment ────────────────────────────
+.vercel
+.netlify

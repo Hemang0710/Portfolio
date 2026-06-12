@@ -1,207 +1,163 @@
-# Data & Software Developer Portfolio
+# Hemang Patel — Portfolio
 
-A modern, professional portfolio website for an Entry-Level Data & Software Developer based in Ontario, Canada. Built with Next.js, TypeScript, and Tailwind CSS, featuring interactive data visualizations, machine learning showcases, and a clean, recruiter-friendly design.
+A single-page developer portfolio with **two switchable experiences** from the same data:
 
-## 🚀 Features
+- **Simple (2D)** — a fast, lightweight, recruiter-friendly scrolling page.
+- **Immersive (3D)** — an interactive low-poly developer workstation. Clicking an
+  object on the desk (monitor, laptop, books, briefcase, mug, résumé) flies the
+  camera in and opens that part of the portfolio.
 
-- **Modern Tech Stack**: Next.js 14 (App Router), TypeScript, Tailwind CSS
-- **Interactive Dashboards**: Data visualizations using Recharts
-- **Smooth Animations**: Framer Motion for professional, subtle animations
-- **Dark Mode**: Full dark mode support with theme persistence
-- **SEO Optimized**: Comprehensive meta tags, Open Graph, and Twitter cards
-- **Accessible**: ARIA labels and semantic HTML throughout
-- **Responsive**: Mobile-first design that works on all devices
-- **Production Ready**: Optimized for deployment on Vercel
+The mode is **chosen automatically** based on the visitor's device and network,
+and can be toggled at any time.
 
-## 📋 Pages
+Built with Next.js 14 (App Router), TypeScript, Tailwind CSS, Framer Motion, and
+React Three Fiber.
 
-1. **Home** - Hero section with value proposition and call-to-action
-2. **About Me** - Professional summary, timeline, and tech stack visualization
-3. **Projects** - Four detailed project showcases:
-   - FitFeast (Health & Nutrition App)
-   - Event Attendance Prediction (ML)
-   - Food Drive Demand Forecasting (Volunteer)
-   - Real Estate Analytics Platform
-4. **Data & ML Showcase** - Interactive dashboards and ML pipeline explanation
-5. **Resume** - ATS-friendly resume layout with download option
-6. **Contact** - Contact form with validation
+---
+
+## ✨ Features
+
+- **Two experiences, one source of truth** — Simple and Immersive modes both read
+  from `lib/portfolio-data.ts`, so content never drifts.
+- **Smart auto-detection** (`lib/useExperienceMode.tsx`):
+  - Defaults to **3D only when the device is capable *and* the network is fast**.
+  - Falls back to **Simple automatically** on slow / data-saver connections
+    (`effectiveType` 2g/3g, `saveData`, or low `downlink`), no-WebGL devices,
+    small screens, or `prefers-reduced-motion`.
+  - The visitor's manual choice is remembered in `localStorage`.
+  - **No Three.js is downloaded in Simple mode** — the 3D bundle is a lazy
+    `dynamic(ssr:false)` chunk, so slow-network visitors get a genuinely light page.
+- **Interactive 3D workstation** — React Three Fiber scene with clickable hotspots.
+- **Live terminal** — a working in-page terminal that responds to commands.
+- **"Ask Hemang" chatbot** — answers common questions from the portfolio data.
+- **Dark mode** with theme persistence.
+- **SEO-ready** — metadata, Open Graph, and Twitter cards.
+- **Accessible & responsive** — semantic HTML, ARIA labels, mobile-first.
+
+---
 
 ## 🛠️ Tech Stack
 
-### Frontend
-- **Next.js 14** - React framework with App Router
-- **TypeScript** - Type-safe development
-- **Tailwind CSS** - Utility-first CSS framework
-- **Framer Motion** - Animation library
-- **Recharts** - Chart library for data visualization
-- **Lucide React** - Icon library
+| Layer        | Tools                                                            |
+|--------------|-----------------------------------------------------------------|
+| Framework    | Next.js 14 (App Router), React 18, TypeScript                   |
+| Styling      | Tailwind CSS, Framer Motion (animations)                        |
+| 3D           | three.js, @react-three/fiber                                    |
+| Charts/Icons | Recharts, Chart.js, lucide-react                                |
+| Hosting      | Vercel (recommended)                                            |
 
-### Backend
-- **Next.js API Routes** - Serverless API endpoints
+---
 
-### Deployment
-- **Vercel** - Recommended hosting platform
+## 📦 Getting Started
 
-## 📦 Installation
+```bash
+# 1. Clone
+git clone https://github.com/Hemang0710/Portfolio.git
+cd Portfolio
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Hemang0710/Portfolio.git
-   cd Portfolio
-   ```
+# 2. Install dependencies
+npm install
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   # or
-   yarn install
-   # or
-   pnpm install
-   ```
+# 3. Run the dev server
+npm run dev
+```
 
-3. **Run the development server**
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   # or
-   pnpm dev
-   ```
+Open [http://localhost:3000](http://localhost:3000).
 
-4. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+To verify a clean production build:
 
-## ⚙️ Configure your links
+```bash
+npm run build
+```
 
-Update **`lib/site-config.ts`** with your real profile URLs. All LinkedIn, GitHub, email, resume, and project links across the site use this file. When visitors click **LinkedIn**, **GitHub**, or **Email**, they will be redirected to these URLs.
+> **Tip:** to see the automatic Simple-mode fallback, open Chrome DevTools →
+> Network → throttle to *Slow 3G* and reload. Use the floating **2D / 3D** toggle
+> (bottom-center) to switch modes manually.
 
-- `links.linkedin` — your LinkedIn profile (e.g. `https://www.linkedin.com/in/your-username`)
-- `links.github` — your GitHub profile
-- `links.email` — your email (used for `mailto:` and Contact page)
-- `links.resumePdf` — path to your resume PDF in `/public`, or a full URL
-- `githubUsername` — used for project repo links and GitHub stats
+---
 
-Put your resume PDF in `/public` (e.g. `Hemang_Patel_Resume.pdf`) if you use a path like `/Hemang_Patel_Resume.pdf`.
+## ⚙️ Configuration
 
-## 🚢 Deployment
+All personal content lives in two files — edit these, not the components:
 
-### Deploy to Vercel (Recommended)
+| Want to change…                         | Edit                          |
+|-----------------------------------------|-------------------------------|
+| Bio, stats, skills, projects, experience| `lib/portfolio-data.ts`       |
+| Name, title, links, résumé, photo       | `lib/site-config.ts`          |
+| Terminal commands                       | `components/LiveTerminal.tsx` |
+| Chatbot answers                         | `components/AskHemang.tsx`    |
+| 3D desk objects / hotspots              | `components/Workstation3D.tsx`|
 
-1. **Push your code to GitHub**
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
-   ```
+Put your résumé PDF in `/public` (e.g. `Hemang_Patel_Resume.pdf`) and point
+`links.resumePdf` at it in `lib/site-config.ts`.
 
-2. **Import project to Vercel**
-   - Go to [vercel.com](https://vercel.com)
-   - Click "New Project"
-   - Import your GitHub repository
-   - Vercel will automatically detect Next.js and configure the build
+---
 
-3. **Configure environment variables** (if needed)
-   - Add any required environment variables in Vercel dashboard
+## 🔐 Environment Variables & Secrets
 
-4. **Deploy**
-   - Click "Deploy" and your site will be live in minutes
+This portfolio is a **static front-end and needs no API keys to run**. If you add
+integrations later (analytics, a real chatbot backend, etc.), follow these rules:
 
-### Alternative Deployment Options
+- Put secrets in **`.env.local`** — it is git-ignored and never committed.
+- Commit only **`.env.example`** with placeholder values as documentation.
+- Client-exposed variables **must** be prefixed `NEXT_PUBLIC_`; anything without
+  that prefix stays server-side. **Never put a private key in a `NEXT_PUBLIC_`
+  variable** — it ships to the browser.
+- Configure production secrets in your host's dashboard (Vercel → Settings →
+  Environment Variables), not in the repo.
 
-- **Netlify**: Similar to Vercel, supports Next.js out of the box
-- **AWS Amplify**: For AWS-based deployments
-- **Docker**: Build a containerized version for any platform
+The `.gitignore` blocks `.env*` files, key/certificate files (`*.pem`, `*.key`,
+`*.p12`, …), and `node_modules/` so credentials and dependencies never get pushed.
 
-## 📝 Customization
+---
 
-### Update Personal Information
-
-1. **Contact Information**
-   - Edit `components/Footer.tsx` for social links
-   - Update email in `app/contact/ContactContent.tsx`
-   - Modify location in various pages
-
-2. **Projects**
-   - Edit project data in `app/projects/ProjectsContent.tsx`
-   - Update GitHub and demo URLs
-   - Modify metrics and descriptions
-
-3. **Resume**
-   - Edit `app/resume/ResumeContent.tsx` with your actual resume content
-   - Create a PDF version and link it in the download button
-
-4. **About Me**
-   - Update timeline in `app/about/AboutContent.tsx`
-   - Modify tech stack categories
-   - Edit professional summary
-
-### Styling
-
-- **Colors**: Edit `tailwind.config.ts` to change the accent color
-- **Fonts**: Modify font imports in `app/layout.tsx`
-- **Components**: All components are in the `components/` directory
-
-## 🎨 Design Principles
-
-- **Clean & Minimal**: No flashy animations, professional appearance
-- **Neutral Colors**: White/gray/black with blue accent
-- **Strong Typography**: Clear hierarchy and readable fonts
-- **Recruiter-Friendly**: Easy to navigate, clear information architecture
-- **Data-Driven**: Showcases technical skills through visualizations
-
-## 📊 Performance
-
-- **Lighthouse Score**: Optimized for >90 score
-- **SEO**: Comprehensive meta tags and structured data
-- **Accessibility**: WCAG 2.1 AA compliant
-- **Mobile Performance**: Optimized for all screen sizes
-
-## 🔧 Development
-
-### Project Structure
+## 🗂️ Project Structure
 
 ```
 Portfolio/
 ├── app/
-│   ├── about/
-│   ├── contact/
-│   ├── data-ml/
-│   ├── projects/
-│   ├── resume/
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx
+│   ├── HomeContent.tsx     # Switches between Simple & Immersive experiences
+│   ├── layout.tsx          # Root layout (Header, Footer, chatbot, theme)
+│   ├── page.tsx            # Home route
+│   └── globals.css
 ├── components/
-│   ├── Footer.tsx
-│   ├── Header.tsx
-│   ├── ProjectCard.tsx
-│   └── ThemeProvider.tsx
-├── public/
-├── package.json
-├── tailwind.config.ts
-├── tsconfig.json
-└── README.md
+│   ├── ImmersiveExperience.tsx  # Full-screen 3D mode
+│   ├── Workstation3D.tsx        # The interactive 3D desk (R3F)
+│   ├── SectionPanel.tsx         # Portfolio part shown when a desk object is clicked
+│   ├── ModeToggle.tsx           # Floating 2D / 3D switch
+│   ├── LiveTerminal.tsx         # Interactive in-page terminal
+│   ├── AskHemang.tsx            # Q&A chatbot widget
+│   ├── Header.tsx · Footer.tsx · ThemeProvider.tsx
+├── lib/
+│   ├── portfolio-data.ts   # Single source of truth for content
+│   ├── site-config.ts      # Name, links, résumé, photo
+│   └── useExperienceMode.tsx    # Capability + network detection, mode state
+├── public/                 # Résumé PDF, photo, static assets
+└── package.json
 ```
-
-### Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-
-## 📄 License
-
-This project is open source and available under the MIT License.
-
-## 🤝 Contributing
-
-This is a personal portfolio project. Feel free to fork and customize for your own use!
-
-## 📧 Contact
-
-For questions or feedback, please reach out through the contact form on the website.
 
 ---
 
-**Built with ❤️ for the Canadian tech community**
+## 🚀 Deployment (Vercel)
+
+1. Push to GitHub.
+2. Import the repo at [vercel.com](https://vercel.com) → **New Project**.
+3. Vercel auto-detects Next.js — no config needed. Deploy.
+4. (Optional) Add a custom domain under **Settings → Domains**.
+
+---
+
+## 📜 Available Scripts
+
+| Script          | Description                  |
+|-----------------|------------------------------|
+| `npm run dev`   | Start the dev server         |
+| `npm run build` | Production build             |
+| `npm run start` | Serve the production build   |
+| `npm run lint`  | Run ESLint                   |
+
+---
+
+## 📄 License
+
+MIT — free to fork and adapt for your own portfolio.

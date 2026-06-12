@@ -1,628 +1,482 @@
 'use client'
 
-import Link from 'next/link'
+/**
+ * HomeContent — single-page portfolio for Hemang Patel.
+ *
+ * Design goals:
+ *  - Clean, spacious, professional layout (no game-y "WORLD" labels).
+ *  - The page itself demonstrates skill: an explorable 3D hero and a live,
+ *    interactive terminal — not just lists of technologies.
+ *  - Positioned for AI Full-Stack / GenAI / ML roles.
+ *
+ * Section ids (hero, about, skills, projects, experience, contact) match the
+ * clickable objects in the 3D hero so "travelling" the desk scrolls here.
+ */
+
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import {
   ArrowRight,
   Download,
   Mail,
   MapPin,
-  ExternalLink,
   Github,
   Linkedin,
-  Server,
+  ExternalLink,
   Brain,
-  Database,
   Code2,
-  Briefcase,
+  Cloud,
+  Sparkles,
   GraduationCap,
-  CheckCircle2,
-  Send,
+  Briefcase,
   Cpu,
   Layers,
-  GitBranch,
-  FileSearch,
-  Shield,
-  BookOpen,
-  MessageSquare,
-  BarChart3,
-  Terminal,
-  Workflow,
+  Gamepad2,
+  Box,
+  MousePointerClick,
+  Terminal as TerminalIcon,
 } from 'lucide-react'
-import TypingAnimation from '@/components/TypingAnimation'
-import ParticleBackground from '@/components/ParticleBackground'
-import HeroAnimation from '@/components/HeroAnimation'
+import LiveTerminal from '@/components/LiveTerminal'
+import ModeToggle from '@/components/ModeToggle'
+import ImmersiveExperience from '@/components/ImmersiveExperience'
+import { ExperienceModeProvider, useExperienceMode } from '@/lib/useExperienceMode'
 import { siteConfig } from '@/lib/site-config'
-import { useState } from 'react'
+import {
+  aboutParagraphs,
+  stats,
+  achievements,
+  skillGroups,
+  projectCategories,
+  experience,
+  education,
+  type IconKey,
+} from '@/lib/portfolio-data'
 
-/* ─── animation variants ─── */
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+/* Map the plain string icon keys from portfolio-data to lucide components. */
+const ICONS: Record<IconKey, React.ReactNode> = {
+  genai: <Brain className="h-5 w-5" />,
+  frontend: <Code2 className="h-5 w-5" />,
+  backend: <Cpu className="h-5 w-5" />,
+  cloud: <Cloud className="h-5 w-5" />,
+  ai: <Brain className="h-5 w-5" />,
+  fullstack: <Layers className="h-5 w-5" />,
+  interactive: <Gamepad2 className="h-5 w-5" />,
+  systems: <TerminalIcon className="h-5 w-5" />,
 }
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
+
+/* ── shared motion helpers ── */
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 }
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-  }),
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
 }
 
-/* ─── data ─── */
-const skillCategories = [
-  {
-    icon: Server,
-    title: 'Backend',
-    color: 'from-indigo-500 to-blue-600',
-    tagClass: 'tag-backend',
-    description: 'Production‑ready API development with thorough error handling and observability.',
-    skills: ['Python', 'FastAPI', 'REST APIs', 'SQL / PostgreSQL', 'Docker', 'Redis'],
-  },
-  {
-    icon: Brain,
-    title: 'AI / ML',
-    color: 'from-purple-500 to-pink-500',
-    tagClass: 'tag-ai',
-    description: 'End‑to‑end GenAI pipelines — from prompt engineering to embedding search.',
-    skills: ['LLMs (GPT-4 / Claude)', 'RAG Pipelines', 'LangChain', 'LangGraph', 'Vector Databases', 'Prompt Engineering'],
-  },
-  {
-    icon: Database,
-    title: 'Data',
-    color: 'from-emerald-500 to-teal-500',
-    tagClass: 'tag-data',
-    description: 'Clean ingestion‑to‑insight pipelines with a focus on data quality.',
-    skills: ['ETL Pipelines', 'Data Modeling', 'Pandas / NumPy', 'Analytics', 'Data Warehousing', 'Airflow Basics'],
-  },
-  {
-    icon: Code2,
-    title: 'Frontend & Tools',
-    color: 'from-orange-500 to-amber-500',
-    tagClass: 'tag-tool',
-    description: 'Enough front‑end to build dashboards, internal tools, and dev utilities.',
-    skills: ['Cursor', 'GitHub Copilot', 'React / Next.js', 'TypeScript', 'Tailwind CSS', 'Git / CI/CD', 'Linux'],
-  },
-]
+/* ── small presentational helpers ── */
+function SectionHeading({ kicker, title, subtitle }: { kicker: string; title: string; subtitle?: string }) {
+  return (
+    <motion.div
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-80px' }}
+      className="mb-12 max-w-2xl"
+    >
+      <div className="mb-3 inline-flex items-center gap-2 text-sm font-medium text-accent">
+        <span className="h-px w-6 bg-accent" />
+        {kicker}
+      </div>
+      <h2 className="heading-2 gradient-text-subtle">{title}</h2>
+      {subtitle && <p className="text-body mt-4">{subtitle}</p>}
+    </motion.div>
+  )
+}
 
-const projects = [
-  {
-    slug: 'rag-career-assistant',
-    title: 'RAG‑Powered Career Assistant',
-    subtitle: 'for Canadian Job Seekers',
-    description:
-      'A retrieval‑augmented generation system that ingests career resources, chunks and embeds them into a vector database, then answers job‑search questions with cited, context‑aware responses via a FastAPI backend.',
-    stack: ['FastAPI', 'LangChain', 'Pinecone', 'OpenAI', 'PostgreSQL', 'Docker'],
-    tagClass: 'tag-ai',
-    icon: MessageSquare,
-    proves: [
-      'Can design and implement a full RAG pipeline end‑to‑end',
-      'Understands vector‑database indexing, chunking strategies, and retrieval tuning',
-      'Builds production APIs with authentication, logging, and structured error handling',
-    ],
-  },
-  {
-    slug: 'job-market-pipeline',
-    title: 'Job Market Analytics Pipeline',
-    subtitle: 'ETL → Warehouse → REST API',
-    description:
-      'A Python data pipeline that scrapes and ingests job postings, cleans and normalizes the data, loads it into a warehouse, and exposes a REST API for trend analytics — with monitoring, alerting, and backfill support.',
-    stack: ['Python', 'FastAPI', 'PostgreSQL', 'Pandas', 'Redis', 'Docker'],
-    tagClass: 'tag-data',
-    icon: BarChart3,
-    proves: [
-      'Designs batch and near‑real‑time ingestion pipelines with idempotent processing',
-      'Thinks about monitoring, error budgets, and data‑quality checks',
-      'Exposes clean, versioned REST APIs for downstream consumers',
-    ],
-  },
-  {
-    slug: 'ai-crm-helpdesk',
-    title: 'AI‑Assisted CRM / Helpdesk',
-    subtitle: 'CRUD + LLM Intelligence',
-    description:
-      'A ticket‑management backend with full CRUD, role‑based access control, pagination, and filtering — enhanced by an LLM service that auto‑summarizes tickets and suggests agent replies with robust timeout and fallback handling.',
-    stack: ['FastAPI', 'PostgreSQL', 'OpenAI', 'SQLAlchemy', 'JWT', 'Pytest'],
-    tagClass: 'tag-backend',
-    icon: Shield,
-    proves: [
-      'Implements RBAC, pagination, and complex query patterns in a real‑world schema',
-      'Integrates external AI services with circuit‑breaker, retry, and graceful degradation',
-      'Writes comprehensive tests and maintains high code coverage',
-    ],
-  },
-  {
-    slug: 'ai-dev-tool',
-    title: 'Personal AI Dev Tool',
-    subtitle: 'LLM‑Powered Code Assistant',
-    description:
-      'A CLI and web tool that reviews pull requests, generates data‑processing boilerplate, and explains complex code — using an LLM with configurable guardrails for safety, token budgets, and caching.',
-    stack: ['Python', 'Typer CLI', 'OpenAI', 'FastAPI', 'Redis', ' SQLite'],
-    tagClass: 'tag-tool',
-    icon: Terminal,
-    proves: [
-      'Builds developer‑productivity tools with thoughtful UX and sensible defaults',
-      'Designs for reliability: token budgets, caching, rate limiting, and content filtering',
-      'Understands the trade‑offs of AI‑assisted workflows and how to keep humans in the loop',
-    ],
-  },
-]
+function SkillBar({ name, level }: { name: string; level: number }) {
+  return (
+    <div>
+      <div className="mb-1 flex items-center justify-between text-sm">
+        <span className="text-gray-700 dark:text-gray-300">{name}</span>
+        <span className="text-xs text-gray-400">{level}%</span>
+      </div>
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-800">
+        <motion.div
+          initial={{ width: 0 }}
+          whileInView={{ width: `${level}%` }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.9, ease: 'easeOut' }}
+          className="h-full rounded-full bg-gradient-to-r from-accent to-emerald"
+        />
+      </div>
+    </div>
+  )
+}
 
-const experiences = [
-  {
-    type: 'work',
-    icon: Briefcase,
-    title: 'Web Development Volunteer',
-    org: 'RiseUP — Greater Toronto Area, Canada',
-    period: '2024',
-    bullets: [
-      'Collaborated with a cross‑functional team on a live product, using Git branching, pull requests, and code reviews',
-      'Delivered front‑end features in React and supported API integrations for a community‑facing application',
-      'Practiced agile ceremonies, documentation, and pair debugging in a real team environment',
-    ],
-  },
-  {
-    type: 'work',
-    icon: Briefcase,
-    title: 'Full‑Stack Developer',
-    org: 'Techmicra Data Systems — India',
-    period: '2021 – 2023',
-    bullets: [
-      'Built and maintained REST APIs and database schemas using Node.js, Express, and MySQL / PostgreSQL',
-      'Developed internal tools with React for data visualization and admin workflows',
-      'Led an AI‑driven feature experiment integrating NLP classification into the product pipeline',
-    ],
-  },
-  {
-    type: 'education',
-    icon: GraduationCap,
-    title: 'Information Technology Solutions',
-    org: 'Humber College — Toronto, Canada',
-    period: '2023 – 2025',
-    bullets: [
-      'Coursework: Data structures, relational databases, networking, cloud computing, agile methodologies',
-      'Capstone project: LLM‑powered knowledge assistant built with Python, FastAPI, and RAG',
-    ],
-  },
-  {
-    type: 'education',
-    icon: GraduationCap,
-    title: 'Bachelor of Computer Applications',
-    org: 'Gujarat University — India',
-    period: '2018 – 2021',
-    bullets: [
-      'Foundations in algorithms, OOP, database management, and software engineering',
-      'Graduated with strong academic standing; focus on application development',
-    ],
-  },
-]
-
-const values = [
-  { icon: FileSearch, title: 'API‑first design', description: 'I start with the contract — OpenAPI spec, request/response shapes, error codes — before writing implementation code.' },
-  { icon: Layers, title: 'Systems thinking', description: 'I think in data flows and failure modes, not just happy‑path features. Every service needs monitoring, retries, and graceful degradation.' },
-  { icon: GitBranch, title: 'Clean, tested code', description: 'Readable code with clear naming, sensible abstractions, and automated tests. If it\'s not tested, it\'s not done.' },
-  { icon: BookOpen, title: 'Document decisions', description: 'ADRs, inline comments on "why" not "what", and clear READMEs. Future‑me (and teammates) will thank present‑me.' },
-  { icon: Workflow, title: 'Collaborate through PRs', description: 'Meaningful commit messages, focused pull requests, and constructive code reviews. The best code is code the whole team understands.' },
-  { icon: Cpu, title: 'Ship and iterate', description: 'Build the smallest useful thing, deploy it, observe it, and improve. Perfect is the enemy of shipped.' },
-]
-
-/* ─── component ─── */
+/* ════════════════════════════════════════════════════════════════ */
+/**
+ * HomeContent — top-level switch between the two portfolio experiences.
+ * The Simple (2D) page and the Immersive (3D) workstation share the same data;
+ * `useExperienceMode` decides the default (3D when fast & capable) and the
+ * floating ModeToggle lets the visitor flip between them.
+ */
 export default function HomeContent() {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' })
-  const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  return (
+    <ExperienceModeProvider>
+      <ExperienceRouter />
+      <ModeToggle />
+    </ExperienceModeProvider>
+  )
+}
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setFormStatus('sending')
-    // construct mailto
-    const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`)
-    const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`)
-    window.location.href = `mailto:${siteConfig.links.email}?subject=${subject}&body=${body}`
-    setTimeout(() => setFormStatus('sent'), 1000)
-  }
+function ExperienceRouter() {
+  const { mode, ready } = useExperienceMode()
+  // Before detection completes (and on the server) render the Simple page so
+  // there's no blank flash and no hydration mismatch.
+  if (!ready || mode !== 'immersive') return <SimplePortfolio />
+  return <ImmersiveExperience />
+}
 
+/* ── A light-weight hero visual for Simple mode (no Three.js download). ── */
+function SimpleHero() {
+  const { setMode, canRender3D } = useExperienceMode()
+  return (
+    <div className="relative w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 shadow-xl dark:border-slate-800">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.25),transparent_55%),radial-gradient(circle_at_75%_80%,rgba(16,185,129,0.18),transparent_55%)]" />
+      <div className="relative flex aspect-[16/8] flex-col items-center justify-center gap-5 px-6 text-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-indigo-400/30 bg-indigo-500/10 px-3 py-1 text-sm text-indigo-200">
+          <Sparkles className="h-3.5 w-3.5" /> Building LLM-powered systems &amp; full-stack apps
+        </div>
+        <h2 className="max-w-xl text-2xl font-bold text-white sm:text-3xl">
+          Explore my work the way you like
+        </h2>
+        <p className="max-w-md text-sm text-slate-400">
+          You&apos;re viewing the fast, lightweight version. Prefer something interactive?
+          Step into the 3D workstation and click around the desk.
+        </p>
+        <button
+          onClick={() => setMode('immersive')}
+          className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-emerald-500 px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
+        >
+          <Box className="h-4 w-4" /> Enter 3D experience
+          <MousePointerClick className="h-4 w-4 opacity-80" />
+        </button>
+        {!canRender3D && (
+          <p className="text-xs text-slate-500">
+            (3D works best on a desktop browser with hardware acceleration.)
+          </p>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function SimplePortfolio() {
   return (
     <div className="min-h-screen">
-      {/* ═══════════════════════  HERO  ═══════════════════════ */}
-      <section id="about" className="relative section-padding overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.08),transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(16,185,129,0.06),transparent_50%)]"></div>
-        <ParticleBackground />
-        <HeroAnimation />
+      {/* ───────── HERO ───────── */}
+      <section id="hero" className="relative overflow-hidden section-padding">
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_15%,rgba(99,102,241,0.10),transparent_55%)]" />
 
         <div className="container-custom relative z-10">
-          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="max-w-5xl mx-auto text-center">
-            {/* Availability badge */}
-            <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-8 backdrop-blur-sm">
+          <motion.div variants={stagger} initial="hidden" animate="visible">
+            <motion.div
+              variants={fadeUp}
+              className="mb-8 inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 text-sm font-medium text-accent backdrop-blur-sm"
+            >
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald"></span>
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald" />
               </span>
-              <MapPin className="w-3.5 h-3.5" />
-              Open to Engineering &amp; Developer Roles
+              <MapPin className="h-3.5 w-3.5" />
+              Open to AI · Full-Stack · ML roles · {siteConfig.location}
             </motion.div>
 
-            {/* Headline */}
-            <motion.h1 variants={itemVariants} className="heading-1 mb-6">
-              <span className="gradient-text">AI &amp; Backend Engineer</span>
+            <motion.h1 variants={fadeUp} className="heading-1 mb-5">
+              <span className="gradient-text-subtle">Hemang Patel</span>
               <br />
-              <span className="text-gray-600 dark:text-gray-400 font-normal text-2xl md:text-3xl lg:text-4xl">
-                building{' '}
-                <TypingAnimation
-                  words={['RAG pipelines', 'FastAPI services', 'data pipelines', 'LLM integrations', 'cloud‑native backends']}
-                  className="text-accent font-semibold"
-                />
-              </span>
+              <span className="gradient-text">AI Full-Stack &amp; GenAI Engineer</span>
             </motion.h1>
 
-            {/* Summary */}
-            <motion.p variants={itemVariants} className="text-body max-w-2xl mx-auto mb-8">
-              I design and build <span className="font-semibold text-gray-900 dark:text-gray-100">Python ‑ powered backend systems</span> and{' '}
-              <span className="font-semibold text-gray-900 dark:text-gray-100">LLM‑driven applications</span> —
-              from FastAPI services and RESTful APIs to RAG pipelines and ETL workflows.
-              Based in the <span className="font-semibold text-gray-900 dark:text-gray-100">GTA, Canada</span>, ready to build scalable, cloud‑native solutions.
+            <motion.p variants={fadeUp} className="text-body mb-8 max-w-2xl">
+              I build <span className="font-semibold text-gray-900 dark:text-gray-100">production full-stack applications</span> and{' '}
+              <span className="font-semibold text-gray-900 dark:text-gray-100">LLM-powered systems</span> — from React &amp; Next.js
+              frontends to FastAPI/Node backends, RAG pipelines, and AI observability. 3+ years of experience, based in Toronto.
             </motion.p>
 
-            {/* CTA Buttons */}
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            <motion.div variants={fadeUp} className="mb-12 flex flex-wrap gap-3">
               <a href="#projects" className="btn-primary inline-flex items-center gap-2 group">
-                View Projects
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                View Projects <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
               <a href={siteConfig.links.resumePdf} download className="btn-secondary inline-flex items-center gap-2">
-                <Download className="w-4 h-4" />
-                Download Resume
+                <Download className="h-4 w-4" /> Download Résumé
               </a>
               <a href="#contact" className="btn-outline inline-flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                Contact Me
+                <Mail className="h-4 w-4" /> Contact
               </a>
             </motion.div>
 
-            {/* Quick stats */}
-            <motion.div variants={itemVariants} className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-              {[
-                { label: 'Python & FastAPI', value: 'Backend', icon: '🐍' },
-                { label: 'LLMs & RAG', value: 'GenAI', icon: '🧠' },
-                { label: 'ETL & Analytics', value: 'Data', icon: '📊' },
-                { label: 'Docker & Cloud', value: 'Infra', icon: '☁️' },
-              ].map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.6 + i * 0.1 }}
-                  className="p-4 rounded-xl bg-white/60 dark:bg-gray-800/40 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/40"
-                >
-                  <div className="text-2xl mb-1">{stat.icon}</div>
-                  <div className="text-sm font-semibold text-accent">{stat.value}</div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</div>
-                </motion.div>
-              ))}
+            {/* Light-weight hero with an invite into the 3D experience */}
+            <motion.div variants={fadeUp}>
+              <SimpleHero />
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* ═══════════════════════  SKILLS  ═══════════════════════ */}
-      <section id="skills" className="section-padding-sm bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
-        <div className="container-custom">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6 }} className="text-center mb-16">
-            <h2 className="heading-2 mb-4">Skills &amp; Tech Stack</h2>
-            <p className="text-body-sm max-w-2xl mx-auto">
-              Focused on backend, AI/ML, and data engineering — with enough front‑end to ship full products.
-            </p>
-          </motion.div>
+      {/* ───────── ABOUT + LIVE TERMINAL ───────── */}
+      <section id="about" className="section-padding-sm border-t border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-900">
+        <div className="container-custom grid items-center gap-12 lg:grid-cols-2">
+          <div>
+            <SectionHeading
+              kicker="About"
+              title="Engineer across the full stack — with an AI core"
+            />
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {skillCategories.map((cat, i) => (
-              <motion.div
-                key={cat.title}
-                custom={i}
-                variants={cardVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-50px' }}
-                className="card-hover p-6 md:p-8"
-              >
-                <div className="flex items-start gap-4 mb-4">
-                  <div className={`flex-shrink-0 p-3 rounded-lg bg-gradient-to-br ${cat.color} bg-opacity-10`}>
-                    <cat.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="heading-3 text-lg mb-1">{cat.title}</h3>
-                    <p className="text-body-sm text-sm">{cat.description}</p>
-                  </div>
-                </div>
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {cat.skills.map((skill) => (
-                    <span key={skill} className={cat.tagClass}>{skill}</span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════  PROJECTS  ═══════════════════════ */}
-      <section id="projects" className="section-padding bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
-        <div className="container-custom">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6 }} className="text-center mb-16">
-            <h2 className="heading-2 mb-4">Featured Projects</h2>
-            <p className="text-body-sm max-w-2xl mx-auto">
-              Deep, realistic systems — not toy CRUD apps. Each project demonstrates production thinking: error handling, observability, testing, and clean architecture.
-            </p>
-          </motion.div>
-
-          <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            {projects.map((project, i) => (
-              <motion.div
-                key={project.slug}
-                custom={i}
-                variants={cardVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-50px' }}
-                className="card-hover p-6 md:p-8 flex flex-col"
-              >
-                {/* Header */}
-                <div className="flex items-start gap-3 mb-4">
-                  <div className="flex-shrink-0 p-2.5 rounded-lg bg-accent/10 border border-accent/20">
-                    <project.icon className="w-5 h-5 text-accent" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white leading-tight">{project.title}</h3>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{project.subtitle}</p>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className="text-body-sm mb-4 flex-grow">{project.description}</p>
-
-                {/* Tech stack */}
-                <div className="flex flex-wrap gap-2 mb-5">
-                  {project.stack.map((tech) => (
-                    <span key={tech} className={project.tagClass}>{tech}</span>
-                  ))}
-                </div>
-
-                {/* What this proves */}
-                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 mb-5">
-                  <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">What this proves</p>
-                  <ul className="space-y-1.5">
-                    {project.proves.map((point, j) => (
-                      <li key={j} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
-                        <CheckCircle2 className="w-4 h-4 text-emerald flex-shrink-0 mt-0.5" />
-                        <span>{point}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Links */}
-                <div className="flex items-center gap-3 mt-auto">
-                  <Link
-                    href={`/projects/${project.slug}`}
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-dark transition-colors"
-                  >
-                    View Details <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                  <a href="#" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                    <Github className="w-3.5 h-3.5" /> GitHub
-                  </a>
-                  <a href="#" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                    <ExternalLink className="w-3.5 h-3.5" /> Demo
-                  </a>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════  EXPERIENCE & EDUCATION  ═══════════════════════ */}
-      <section id="experience" className="section-padding-sm bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
-        <div className="container-custom">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6 }} className="text-center mb-16">
-            <h2 className="heading-2 mb-4">Experience &amp; Education</h2>
-            <p className="text-body-sm max-w-2xl mx-auto">
-              Real product work across continents — from volunteer collaboration in Canada to full‑stack delivery in India.
-            </p>
-          </motion.div>
-
-          <div className="max-w-4xl mx-auto">
-            {/* Timeline */}
-            <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute left-4 md:left-6 top-0 bottom-0 w-px bg-gradient-to-b from-accent via-accent/40 to-transparent"></div>
-
-              <div className="space-y-8">
-                {experiences.map((exp, i) => (
-                  <motion.div
-                    key={exp.title + exp.org}
-                    custom={i}
-                    variants={cardVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: '-50px' }}
-                    className="relative pl-12 md:pl-16"
-                  >
-                    {/* Timeline dot */}
-                    <div className={`absolute left-2.5 md:left-4 top-1 w-3.5 h-3.5 rounded-full border-2 ${exp.type === 'work' ? 'bg-accent border-accent/40' : 'bg-emerald border-emerald/40'}`}></div>
-
-                    <div className="card p-6">
-                      <div className="flex items-start justify-between gap-4 mb-3">
-                        <div>
-                          <h3 className="font-bold text-gray-900 dark:text-white">{exp.title}</h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{exp.org}</p>
-                        </div>
-                        <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 whitespace-nowrap">{exp.period}</span>
-                      </div>
-                      <ul className="space-y-2">
-                        {exp.bullets.map((b, j) => (
-                          <li key={j} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
-                            <span className="w-1.5 h-1.5 rounded-full bg-gray-400 mt-1.5 flex-shrink-0"></span>
-                            <span>{b}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </motion.div>
+            {/* Photo + intro: a real face keeps the page human. */}
+            <div className="mb-6 flex items-start gap-5">
+              <Image
+                src={siteConfig.photo}
+                alt="Hemang Patel"
+                width={112}
+                height={112}
+                className="h-28 w-28 shrink-0 rounded-2xl object-cover object-top shadow-md ring-1 ring-gray-200 dark:ring-gray-700"
+                priority
+              />
+              <div className="space-y-4 text-body">
+                {aboutParagraphs.map((p, i) => (
+                  <p key={i}>{p}</p>
                 ))}
               </div>
             </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              {stats.map((s) => (
+                <div key={s.label} className="card p-4 text-center">
+                  <div className="gradient-text text-2xl font-bold">{s.value}</div>
+                  <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* The terminal: show, don't tell */}
+          <div>
+            <div className="mb-3 flex items-center gap-2 text-sm text-gray-500">
+              <Sparkles className="h-4 w-4 text-accent" />
+              Try it — this terminal is live. Type a command.
+            </div>
+            <LiveTerminal />
           </div>
         </div>
-      </section>
 
-      {/* ═══════════════════════  HOW I WORK  ═══════════════════════ */}
-      <section className="section-padding-sm bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900 border-t border-gray-100 dark:border-gray-800">
-        <div className="container-custom">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6 }} className="text-center mb-16">
-            <h2 className="heading-2 mb-4">How I Work</h2>
-            <p className="text-body-sm max-w-2xl mx-auto">
-              Engineering values I practice daily — written as a senior engineer would describe a strong junior they&apos;d want on their team.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {values.map((v, i) => (
+        {/* Impact strip — résumé-backed numbers */}
+        <div className="container-custom mt-12">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {achievements.map((a) => (
               <motion.div
-                key={v.title}
-                custom={i}
-                variants={cardVariants}
+                key={a}
+                variants={fadeUp}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, margin: '-50px' }}
-                className="p-6 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-accent/20 transition-all duration-300 group"
+                viewport={{ once: true, margin: '-40px' }}
+                className="flex items-start gap-2 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700 dark:border-gray-800 dark:bg-gray-950/40 dark:text-gray-300"
               >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
-                    <v.icon className="w-5 h-5 text-accent" />
-                  </div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white text-sm">{v.title}</h3>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{v.description}</p>
+                <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                <span>{a}</span>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════  CONTACT  ═══════════════════════ */}
-      <section id="contact" className="section-padding bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+      {/* ───────── SKILLS ───────── */}
+      <section id="skills" className="section-padding bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
         <div className="container-custom">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6 }} className="text-center mb-16">
-            <h2 className="heading-2 mb-4">Let&apos;s Connect</h2>
-            <p className="text-body-sm max-w-2xl mx-auto">
-              Looking for an AI / Backend / Data engineer who ships quality code and thinks in systems? I&apos;m actively seeking opportunities in the Canadian market — let&apos;s talk.
-            </p>
-          </motion.div>
-
-          <div className="max-w-5xl mx-auto grid lg:grid-cols-5 gap-12">
-            {/* Contact form */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="lg:col-span-3"
-            >
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid sm:grid-cols-2 gap-5">
-                  <div>
-                    <label htmlFor="contact-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Name</label>
-                    <input
-                      id="contact-name"
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all text-sm"
-                      placeholder="Your name"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="contact-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
-                    <input
-                      id="contact-email"
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all text-sm"
-                      placeholder="you@company.com"
-                    />
-                  </div>
+          <SectionHeading
+            kicker="Skills"
+            title="The stack I build with"
+            subtitle="Proficiency across the GenAI, frontend, backend, and cloud layers — the same tools that power the projects below."
+          />
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+            className="grid gap-6 sm:grid-cols-2"
+          >
+            {skillGroups.map((group) => (
+              <motion.div key={group.title} variants={fadeUp} className="card-hover p-6">
+                <div className={`mb-5 flex items-center gap-2 font-semibold ${group.accent}`}>
+                  {ICONS[group.key]}
+                  {group.title}
                 </div>
-                <div>
-                  <label htmlFor="contact-message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Message</label>
-                  <textarea
-                    id="contact-message"
-                    required
-                    rows={5}
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all text-sm resize-none"
-                    placeholder="Tell me about the role or project…"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={formStatus === 'sending'}
-                  className="btn-primary inline-flex items-center gap-2"
-                >
-                  {formStatus === 'sent' ? (
-                    <>Sent! <CheckCircle2 className="w-4 h-4" /></>
-                  ) : (
-                    <>Send Message <Send className="w-4 h-4" /></>
-                  )}
-                </button>
-              </form>
-            </motion.div>
-
-            {/* Contact info sidebar */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="lg:col-span-2 space-y-6"
-            >
-              <div className="p-6 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Quick Links</h3>
                 <div className="space-y-4">
-                  <a href={`mailto:${siteConfig.links.email}`} className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 hover:text-accent transition-colors">
-                    <Mail className="w-4 h-4" />
-                    {siteConfig.links.email}
-                  </a>
-                  <a href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 hover:text-accent transition-colors">
-                    <Linkedin className="w-4 h-4" />
-                    LinkedIn Profile
-                  </a>
-                  <a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 hover:text-accent transition-colors">
-                    <Github className="w-4 h-4" />
-                    GitHub — {siteConfig.githubUsername}
-                  </a>
-                  <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-                    <MapPin className="w-4 h-4" />
-                    {siteConfig.location}
-                  </div>
+                  {group.items.map((it) => (
+                    <SkillBar key={it.name} name={it.name} level={it.level} />
+                  ))}
                 </div>
-              </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
 
-              <div className="p-6 rounded-xl bg-gradient-to-br from-accent/5 to-emerald/5 border border-accent/10">
-                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                  <span className="font-semibold text-accent">Currently open</span> to full‑time Engineering and Developer roles across Canada.
-                  I&apos;m also happy to discuss contract work, open‑source collaboration, or interesting side projects.
-                </p>
+      {/* ───────── PROJECTS ───────── */}
+      <section id="projects" className="section-padding border-t border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-900">
+        <div className="container-custom">
+          <SectionHeading
+            kicker="Projects"
+            title="Selected work"
+            subtitle="Grouped by domain. AI & ML projects are highlighted — each links to its GitHub repository."
+          />
+
+          <div className="space-y-14">
+            {projectCategories.map((cat) => (
+              <div key={cat.id}>
+                <div className="mb-6 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  <span className="text-accent">{ICONS[cat.id]}</span>
+                  {cat.label}
+                </div>
+                <motion.div
+                  variants={stagger}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: '-60px' }}
+                  className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+                >
+                  {cat.projects.map((p) => (
+                    <motion.a
+                      key={p.title}
+                      href={p.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variants={fadeUp}
+                      className={`card-hover group flex flex-col p-6 ${
+                        p.featured ? 'ring-1 ring-accent/30' : ''
+                      }`}
+                    >
+                      <div className="mb-3 flex items-start justify-between gap-2">
+                        <h3 className="font-semibold text-gray-900 dark:text-gray-100">{p.title}</h3>
+                        <ExternalLink className="h-4 w-4 shrink-0 text-gray-400 transition group-hover:text-accent" />
+                      </div>
+                      {p.featured && (
+                        <span className="mb-3 inline-flex w-fit items-center gap-1 rounded-full bg-purple-500/10 px-2 py-0.5 text-xs font-medium text-purple-500 dark:text-purple-400">
+                          <Sparkles className="h-3 w-3" /> Featured AI
+                        </span>
+                      )}
+                      <p className="text-body-sm mb-4 flex-1">{p.blurb}</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {p.tags.map((t) => (
+                          <span key={t} className="rounded-md border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.a>
+                  ))}
+                </motion.div>
               </div>
-            </motion.div>
+            ))}
           </div>
+
+          <div className="mt-12 text-center">
+            <a
+              href={siteConfig.links.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-outline inline-flex items-center gap-2"
+            >
+              <Github className="h-4 w-4" /> See all repositories
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── EXPERIENCE + EDUCATION ───────── */}
+      <section id="experience" className="section-padding bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
+        <div className="container-custom">
+          <SectionHeading kicker="Experience" title="Where I've worked" />
+          <div className="relative space-y-8 border-l border-gray-200 pl-6 dark:border-gray-800">
+            {experience.map((job) => (
+              <motion.div
+                key={job.company}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-60px' }}
+                className="relative"
+              >
+                <span className="absolute -left-[31px] top-1.5 flex h-3 w-3 items-center justify-center rounded-full bg-accent ring-4 ring-white dark:ring-gray-900" />
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 className="font-semibold text-gray-900 dark:text-gray-100">
+                    {job.role} · <span className="text-accent">{job.company}</span>
+                  </h3>
+                  <span className="text-sm text-gray-500">{job.period}</span>
+                </div>
+                <div className="mb-3 text-sm text-gray-500">{job.location}</div>
+                <ul className="space-y-1.5">
+                  {job.points.map((pt, i) => (
+                    <li key={i} className="text-body-sm flex gap-2">
+                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Education */}
+          <div className="mt-10 grid gap-4 sm:grid-cols-2">
+            {education.map((edu) => (
+              <motion.div
+                key={edu.title}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="card flex items-start gap-4 p-6"
+              >
+                <div className="rounded-lg bg-accent/10 p-3 text-accent">
+                  <GraduationCap className="h-6 w-6" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900 dark:text-gray-100">{edu.title}</h3>
+                  <p className="mt-0.5 text-sm text-gray-600 dark:text-gray-400">{edu.school}</p>
+                  <p className="mt-0.5 text-sm text-gray-500">{edu.detail}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── CONTACT ───────── */}
+      <section id="contact" className="section-padding border-t border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-900">
+        <div className="container-custom max-w-3xl text-center">
+          <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <div className="mb-3 inline-flex items-center gap-2 text-sm font-medium text-accent">
+              <Briefcase className="h-4 w-4" /> Let&apos;s work together
+            </div>
+            <h2 className="heading-2 gradient-text-subtle mb-4">Open to AI &amp; full-stack roles</h2>
+            <p className="text-body mb-8">
+              I&apos;m looking for AI Full-Stack, GenAI, and ML opportunities. The fastest way to reach me is email — I reply quickly.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <a href={`mailto:${siteConfig.links.email}`} className="btn-primary inline-flex items-center gap-2">
+                <Mail className="h-4 w-4" /> {siteConfig.links.email}
+              </a>
+              <a href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer" className="btn-secondary inline-flex items-center gap-2">
+                <Linkedin className="h-4 w-4" /> LinkedIn
+              </a>
+              <a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer" className="btn-secondary inline-flex items-center gap-2">
+                <Github className="h-4 w-4" /> GitHub
+              </a>
+            </div>
+          </motion.div>
         </div>
       </section>
     </div>
